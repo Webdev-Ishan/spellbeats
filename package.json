@@ -11,8 +11,10 @@
   "dependencies": {
     "@prisma/client": "^6.11.1",
     "next": "15.3.5",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
