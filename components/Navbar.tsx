@@ -4,7 +4,8 @@ import { HoveredLink, Menu, MenuItem } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import SignOut from "./Signout";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
+import logo from "../public/logo.png"
 export function NavbarDemo() {
   return (
     <div className="relative w-full flex items-center justify-center">
@@ -22,13 +23,20 @@ function Navbar({ className }: { className?: string }) {
   const router = useRouter();
   return (
     <div className={cn("fixed top-3 inset-x-0 w-full z-50", className)}>
-      <nav className="flex items-center border border-white hover:shadow hover:shadow-blue-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8 bg-white rounded-4xl dark:bg-black shadow ">
-        <div className="flex items-center">
+      <nav className="flex items-center bg-slate-800 border border-white hover:shadow hover:shadow-green-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8  rounded-4xl  shadow ">
+        <div className="flex items-center justify-center gap-4">
+          <Image
+            width={16}
+            height={16}
+            src={logo}
+            alt="logo"
+            className="rounded-lg border border-green-500"
+          />
           <h1
             onClick={() => router.push("/")}
-            className="text-blue-500 cursor-pointer text-xl font-sans md:text-lg font-bold"
+            className="text-green-500 cursor-pointer text-xl font-sans md:text-lg font-bold"
           >
-            Transactify
+            SpellBeats
           </h1>
         </div>
         {/* Hamburger button for mobile */}
@@ -93,7 +101,7 @@ function Navbar({ className }: { className?: string }) {
               item="FAQs"
             ></MenuItem>
             <MenuItem
-              className="text-green-400 text-xs "
+              className="text-white text-xs "
               setActive={setActive}
               active={active}
               onclick={() => {

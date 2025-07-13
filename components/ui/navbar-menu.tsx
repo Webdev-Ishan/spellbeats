@@ -42,7 +42,7 @@ export const MenuItem = ({
       <motion.p
         transition={{ duration: 0.3 }}
         className={cn(
-          "cursor-pointer hover:text-blue-500",
+          "cursor-pointer hover:text-green-500",
           className // <-- custom styles here
         )}
       >
@@ -59,7 +59,7 @@ export const MenuItem = ({
               <motion.div
                 transition={transition}
                 layoutId="active" // layoutId ensures smooth animation
-                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
+                className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
               >
                 <motion.div
                   layout // layout ensures smooth animation
@@ -86,7 +86,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full w-full border border-transparent dark:bg-black  bg-black shadow-input flex justify-evenly items-center space-x-6 px-6 py-1 "
+      className="relative rounded-full w-full border border-transparent dark:bg-slate-800  bg-slate-800 shadow-input flex justify-evenly items-center space-x-6 px-6 py-1 "
     >
       {children}
     </nav>
