@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
+      from: "SpellBeats <onboarding@resend.dev>",
       to: [newUser.email],
       subject: "Welcome to Spellbeats",
       text: "Welcome to the magival world of the music and melodies your registration is successfull",

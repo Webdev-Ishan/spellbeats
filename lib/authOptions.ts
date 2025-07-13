@@ -16,7 +16,7 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET!,
     }),
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
 
       credentials: {
         email: {

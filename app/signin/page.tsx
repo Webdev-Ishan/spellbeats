@@ -5,24 +5,19 @@ import { Input } from "../../components/ui/input";
 import { cn } from "@/lib/utils";
 import z from "zod";
 import { toast } from "react-toastify";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 
-type backendresponse = {
-  message: string;
-  success: boolean;
-};
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+
 
 const registerSchema = z.object({
-  username: z.string().min(3).max(20),
   email: z.string(),
   password: z.string().min(6).max(12),
 });
 
-export default function SignupForm() {
+export default function SignInForm() {
   const router = useRouter();
 
-  const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
@@ -30,60 +25,41 @@ export default function SignupForm() {
     e.preventDefault();
 
     const parsedbody = registerSchema.safeParse({
-      username,
       email,
       password,
     });
 
     if (!parsedbody.success) {
       const errors = parsedbody.error.flatten().fieldErrors;
-      toast.error(errors.username?.[0] || "Invalid input");
+      toast.error(errors.email?.[0] || "Invalid input");
       console.log(errors);
       setemail("");
       setpassword("");
-      setusername("");
 
       return;
     }
 
     try {
-      const response = await axios.post<backendresponse>(
-        "/api/auth/register",
-        parsedbody.data,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await signIn("credentials", {
+        email: parsedbody.data.email,
+        password: parsedbody.data.password,
+        redirect: false,
+      });
 
-      if (response.data && response.data.success) {
-        toast.success("Registration Successfull!!");
+      if (response?.ok) {
+        toast.success("Login Successfull!!");
         router.push("/");
       } else {
         toast.error("OOps try again");
         console.log(response);
       }
     } catch (error) {
-      if (axios.isAxiosError(error) && error.config) {
-        const status = error.status;
-
-        if (status === 401) {
-          toast.error("Please send valid inputs");
-          console.log(error);
-        } else if (status === 409) {
-          toast.error("User with this email already exists");
-        } else {
-          toast.error("Something went wrong");
-          console.log(error);
-        }
-      } else {
-        if (error instanceof Error) {
-          toast.error("Unexpected Error");
-          console.log(error);
-        }
+      if (error instanceof Error) {
+        toast.error("Something went wrong");
+        console.log(error);
       }
     } finally {
       setemail("");
-      setusername("");
       setpassword("");
     }
   };
@@ -94,22 +70,11 @@ export default function SignupForm() {
           Welcome to SpellBeats
         </h2>
         <p className="mt-2 max-w-sm text-sm text-neutral-300">
-          Subscribe to SpellBeats for best user experience
+          Login to SpellBeats for best user experience
         </p>
 
         <form className="my-8" onSubmit={handleSubmit}>
-          <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
-            <LabelInputContainer>
-              <Label htmlFor="firstname">Username</Label>
-              <Input
-                id="firstname"
-                placeholder="Tyler"
-                type="text"
-                value={username}
-                onChange={(e) => setusername(e.target.value)}
-              />
-            </LabelInputContainer>
-          </div>
+          <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2"></div>
           <LabelInputContainer className="mb-4 text-white">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -135,7 +100,7 @@ export default function SignupForm() {
             className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br bg-black font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
           >
-            Sign up &rarr;
+            Login &rarr;
             <BottomGradient />
           </button>
         </form>
