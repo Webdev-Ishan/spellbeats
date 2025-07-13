@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
@@ -14,10 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user{
-id Int @id @default(autoincrement()) @unique
-email String @unique
-password String 
-username String 
+model user {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  username String
 
+  // A user can create many streams
+  streams streams[] @relation("UserStreams")
+
+  // A user can upvote many streams
+  upvotes Upvotes[] @relation("UserUpvotes")
+}
+
+model streams {
+  id     String     @id @default(uuid())
+  type   streamtype
+  active Boolean    @default(true)
+
+  userId  String
+  creator user   @relation("UserStreams", fields: [userId], references: [id])
+
+  upvotes Upvotes[] @relation("StreamUpvotes")
+}
+
+model Upvotes {
+  id String @id @default(uuid())
+
+  userId String
+  user   user   @relation("UserUpvotes", fields: [userId], references: [id])
+
+  streamsId String
+  streams   streams @relation("StreamUpvotes", fields: [streamsId], references: [id])
+
+  // Prevent duplicate upvotes from the same user on the same stream
+  @@unique([userId, streamsId])
+}
+
+enum streamtype {
+  Spotify
+  Youtube
 }
