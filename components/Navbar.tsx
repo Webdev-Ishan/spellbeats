@@ -17,7 +17,7 @@ export function NavbarDemo() {
   );
 }
 
-function Navbar({ className }: { className?: string }) {
+export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
@@ -145,4 +145,4 @@ function Navbar({ className }: { className?: string }) {
   );
 }
 
-export default Navbar;
+
