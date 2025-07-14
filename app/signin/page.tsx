@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { cn } from "@/lib/utils";
@@ -7,8 +7,7 @@ import z from "zod";
 import { toast } from "react-toastify";
 
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-
+import { signIn, useSession } from "next-auth/react";
 
 const registerSchema = z.object({
   email: z.string(),
@@ -17,6 +16,13 @@ const registerSchema = z.object({
 
 export default function SignInForm() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/Profile");
+    }
+  }, [session, status, router]);
 
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");

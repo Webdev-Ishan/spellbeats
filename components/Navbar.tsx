@@ -115,10 +115,10 @@ export default function Navbar({ className }: { className?: string }) {
       </nav>
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-white dark:bg-black shadow px-4 py-2">
+        <div className="md:hidden bg-slate-800 shadow px-4 py-2">
           <div className="flex flex-col space-y-2">
             <HoveredLink onClick={() => router.push("/")}>
-              Transactify
+              Home
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/Profile")}>
               Profile
