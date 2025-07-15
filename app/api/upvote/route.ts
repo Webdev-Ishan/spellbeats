@@ -15,11 +15,11 @@ export async function POST(req: NextRequest) {
 
     const userid = token.id.toString();
     const body = await req.json();
-    const streamid = body?.data?.streamid;
+    const streamid = body?.streamid;
 
     if (!userid || !streamid) {
       return NextResponse.json(
-        { success: false, message: "Ids are not found" },
+        { success: false, message: "Ids are not found", userid, streamid },
         { status: 400 }
       );
     }

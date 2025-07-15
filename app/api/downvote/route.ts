@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
 
-
     if (!token || !token.id) {
       return NextResponse.json(
         { success: false, message: "Please login first" },
@@ -16,7 +15,7 @@ export async function POST(req: NextRequest) {
 
     const userid = token.id.toString();
     const body = await req.json();
-    const streamid = body?.data?.streamid;
+    const streamid = body?.streamid;
 
     if (!userid || !streamid) {
       return NextResponse.json(
@@ -35,14 +34,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (existUpvote) {
+    if (!existUpvote) {
       return NextResponse.json(
-        { success: false, message: "Already upvoted" },
+        { success: false, message: "Please upvote first" },
         { status: 409 } // 409 Conflict
       );
     }
-
-    // Create new upvote
     await prisma.upvotes.delete({
       where: {
         userId_streamsId: {

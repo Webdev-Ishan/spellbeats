@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { streamtype } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
+import youtubesearchapi from "youtube-search-api";
 
 // ✅ Regex Definitions
 const youtubeRegex =
@@ -18,9 +19,6 @@ const streamSchema = z.object({
   active: z.boolean().default(true),
   url: z.string(),
   extractedid: z.string(),
-  title: z.string(),
-  bigImage: z.string(),
-  smallImage: z.string(),
 });
 
 export async function POST(req: NextRequest) {
@@ -43,8 +41,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { url, extractedid, type, active, title, smallImage, bigImage } =
-    parsedBody.data;
+  const { url, extractedid, type, active } = parsedBody.data;
 
   const isYoutube = youtubeRegex.test(url);
   const isSpotify = spotifyRegex.test(url);
@@ -71,6 +68,12 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
+    const res = await youtubesearchapi.GetVideoDetails(extractedid);
+    const title = res.title;
+    const thumbnails = res.thumbnail.thumbnails;
+    thumbnails.sort((a: { width: number }, b: { width: number }) =>
+      a.width < b.width ? -1 : 1
+    );
 
     const newStream = await prisma.streams.create({
       data: {
@@ -80,8 +83,14 @@ export async function POST(req: NextRequest) {
         extractedid,
         userId: token.id.toString(),
         title,
-        smallImage,
-        bigImage,
+        smallImage:
+          (thumbnails.length > 1
+            ? thumbnails[thumbnails.length - 2].url
+            : thumbnails[thumbnails.length - 1].url) ??
+          "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg",
+        bigImage:
+          thumbnails[thumbnails.length - 1].url ??
+          "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg",
       },
     });
     if (!newStream) {
