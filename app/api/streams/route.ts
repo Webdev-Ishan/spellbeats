@@ -18,10 +18,13 @@ const streamSchema = z.object({
   active: z.boolean().default(true),
   url: z.string(),
   extractedid: z.string(),
+  title: z.string(),
+  bigImage: z.string(),
+  smallImage: z.string(),
 });
 
 export async function POST(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
 
   if (!token || !token.id) {
     return NextResponse.json(
@@ -40,7 +43,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { url, extractedid, type, active } = parsedBody.data;
+  const { url, extractedid, type, active, title, smallImage, bigImage } =
+    parsedBody.data;
 
   const isYoutube = youtubeRegex.test(url);
   const isSpotify = spotifyRegex.test(url);
@@ -75,6 +79,9 @@ export async function POST(req: NextRequest) {
         url,
         extractedid,
         userId: token.id.toString(),
+        title,
+        smallImage,
+        bigImage,
       },
     });
     if (!newStream) {
@@ -96,5 +103,59 @@ export async function POST(req: NextRequest) {
       },
       { status: 500 }
     );
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
+
+    if (!token || !token.id) {
+      return NextResponse.json(
+        { success: false, message: "Please login first" },
+        { status: 401 }
+      );
+    }
+
+    const userid = token.id.toString();
+
+    const upvotedStreams = await prisma.upvotes.findMany({
+      where: {
+        userId: userid,
+      },
+      select: {
+        streams: {
+          select: {
+            id: true,
+            url: true,
+            type: true,
+            active: true,
+            extractedid: true,
+            title: true,
+            bigImage: true,
+            smallImage: true,
+          },
+        },
+      },
+    });
+
+    if (!upvotedStreams) {
+      return NextResponse.json(
+        { success: false, message: "Unable to fetch streams." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, upvotedStreams },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { success: false, message: "Something went wrong." },
+        { status: 500 }
+      );
+    }
   }
 }

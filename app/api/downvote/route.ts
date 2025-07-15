@@ -3,65 +3,70 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!token || !token.id) {
-    return NextResponse.json(
-      { success: false, message: "Please login first" },
-      { status: 400 }
-    );
-  }
-
-  const userid = token.id.toString();
-  const data = await req.json();
-  const { streamid } = data.data;
-
-  if (!userid || !data) {
-    return NextResponse.json(
-      { success: false, message: "Ids are not found" },
-      { status: 401 }
-    );
-  }
-
   try {
+    const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
+
+
+    if (!token || !token.id) {
+      return NextResponse.json(
+        { success: false, message: "Please login first" },
+        { status: 401 }
+      );
+    }
+
+    const userid = token.id.toString();
+    const body = await req.json();
+    const streamid = body?.data?.streamid;
+
+    if (!userid || !streamid) {
+      return NextResponse.json(
+        { success: false, message: "Ids are not found" },
+        { status: 400 }
+      );
+    }
+
+    // Check if the user has already upvoted
     const existUpvote = await prisma.upvotes.findUnique({
       where: {
         userId_streamsId: {
-          streamsId: streamid,
           userId: userid,
+          streamsId: streamid,
         },
       },
     });
 
-    if (!existUpvote) {
+    if (existUpvote) {
       return NextResponse.json(
-        { success: false, message: "Does not exist" },
-        { status: 500 }
+        { success: false, message: "Already upvoted" },
+        { status: 409 } // 409 Conflict
       );
     }
 
+    // Create new upvote
     await prisma.upvotes.delete({
       where: {
         userId_streamsId: {
-          streamsId: streamid,
           userId: userid,
+          streamsId: streamid,
         },
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "DownVoted",
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Downvoted",
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json(
-        { success: false, message: "Somethign went wrong." },
+        { success: false, message: "Something went wrong." },
         { status: 500 }
       );
     }
   }
-  return NextResponse.json(
-    { success: false, message: "Internal Server Error." },
-    { status: 500 }
-  );
 }

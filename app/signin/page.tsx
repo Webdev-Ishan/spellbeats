@@ -20,7 +20,7 @@ export default function SignInForm() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/Profile");
+      router.push("/");
     }
   }, [session, status, router]);
 
