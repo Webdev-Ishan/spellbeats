@@ -105,7 +105,7 @@ export default function Navbar({ className }: { className?: string }) {
               setActive={setActive}
               active={active}
               onclick={() => {
-                router.push("/About");
+                router.push("/about");
               }}
               item="About Us"
             ></MenuItem>
@@ -132,7 +132,7 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink onClick={() => router.push("/FAQ")}>
               Frequently Asked Questions
             </HoveredLink>
-            <HoveredLink onClick={() => router.push("/About")}>
+            <HoveredLink onClick={() => router.push("/about")}>
               About Us
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/signin")}>
