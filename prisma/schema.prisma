@@ -21,12 +21,13 @@ model user {
 }
 
 model streams {
-  id     String     @id @default(uuid())
-  type   streamtype
-  active Boolean    @default(true)
-
-  userId  String
-  creator user   @relation("UserStreams", fields: [userId], references: [id])
+  id          String     @id @default(uuid())
+  type        streamtype
+  active      Boolean    @default(true)
+  url         String
+  extractedid String
+  userId      String
+  creator     user       @relation("UserStreams", fields: [userId], references: [id])
 
   upvotes Upvotes[] @relation("StreamUpvotes")
 }
