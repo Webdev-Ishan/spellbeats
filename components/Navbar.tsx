@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import SignOut from "./Signout";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logo from "../public/logo.png"
+import logo from "../public/logo.png";
 export function NavbarDemo() {
   return (
     <div className="relative w-full flex items-center justify-center">
@@ -23,7 +23,7 @@ export default function Navbar({ className }: { className?: string }) {
   const router = useRouter();
   return (
     <div className={cn("fixed top-3 inset-x-0 w-full z-50", className)}>
-      <nav className="flex items-center bg-slate-800 border border-white hover:shadow hover:shadow-green-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8  rounded-4xl  shadow ">
+      <nav className="flex items-center py-1 bg-slate-800 border border-white hover:shadow hover:shadow-green-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8  rounded-4xl  shadow ">
         <div className="flex items-center justify-center gap-4">
           <Image
             width={16}
@@ -96,9 +96,9 @@ export default function Navbar({ className }: { className?: string }) {
             <MenuItem
               setActive={setActive}
               active={active}
-              onclick={() => router.push("/FAQ")}
+              onclick={() => router.push("/reviews")}
               className="text-white text-xs"
-              item="FAQs"
+              item="Reviews"
             ></MenuItem>
             <MenuItem
               className="text-white text-xs "
@@ -117,9 +117,7 @@ export default function Navbar({ className }: { className?: string }) {
       {mobileOpen && (
         <div className="md:hidden bg-slate-800 shadow px-4 py-2">
           <div className="flex flex-col space-y-2">
-            <HoveredLink onClick={() => router.push("/")}>
-              Home
-            </HoveredLink>
+            <HoveredLink onClick={() => router.push("/")}>Home</HoveredLink>
             <HoveredLink onClick={() => router.push("/Profile")}>
               Profile
             </HoveredLink>
@@ -129,7 +127,7 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink onClick={() => router.push("/Contact")}>
               Contact Us
             </HoveredLink>
-            <HoveredLink onClick={() => router.push("/FAQ")}>
+            <HoveredLink onClick={() => router.push("/reviews")}>
               Frequently Asked Questions
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/about")}>
@@ -144,5 +142,3 @@ export default function Navbar({ className }: { className?: string }) {
     </div>
   );
 }
-
-

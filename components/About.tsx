@@ -7,13 +7,11 @@ import {
   Users,
   Heart,
   Headphones,
-  Play,
   Star,
   Award,
   Globe,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import about from "../public/about.jpg";
 import { useRouter } from "next/navigation";
 
@@ -84,8 +82,8 @@ export default function AboutUs() {
       {/* Hero Section */}
       <section className="bg-slate-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <Badge className="bg-green-500 hover:bg-green-500 text-white mb-6">
-            About SoundWave
+          <Badge className="bg-green-500 py-2 hover:bg-green-500 text-md text-white mb-6">
+            About SpellBeats
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Connecting the World Through Music
@@ -119,7 +117,7 @@ export default function AboutUs() {
               </h2>
               <div className="space-y-4 text-slate-600 text-lg">
                 <p>
-                  Founded in 2018, SoundWave began as a simple idea: what if
+                  Founded in 2018, SpellBeats began as a simple idea: what if
                   discovering new music could be as exciting as hearing your
                   favorite song for the first time?
                 </p>
@@ -169,7 +167,7 @@ export default function AboutUs() {
               Our Values
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              The principles that guide everything we do at SoundWave
+              The principles that guide everything we do at SpellBeats
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -201,7 +199,7 @@ export default function AboutUs() {
               Meet Our Team
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              The passionate people behind SoundWave mission
+              The passionate people behind SpellBeats mission
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -246,6 +244,7 @@ export default function AboutUs() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
+              onClick={() => router.push("/")}
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               Start Listening
@@ -261,116 +260,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                  <Play className="w-4 h-4 text-white fill-white" />
-                </div>
-                <span className="text-xl font-bold">SoundWave</span>
-              </div>
-              <p className="text-slate-400">
-                Connecting the world through music, one song at a time.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Product</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Premium
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Mobile App
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Company</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Press
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Privacy
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
-            <p>
-              &copy; {new Date().getFullYear()} SoundWave. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      
     </div>
   );
 }

@@ -22,12 +22,12 @@ export default function SignOut() {
   };
 
   return (
-    <div className="flex flex-wrap items-center  md:flex-row">
+    <div className="flex flex-wrap items-center   md:flex-row">
       {isloggedin ? (
         <Button
           variant={"destructive"}
           onClick={handlesubmit}
-          className="bg-white text-black text-xs"
+          className="bg-white text-black px-2 text-xs"
         >
           Logut
         </Button>
@@ -35,7 +35,7 @@ export default function SignOut() {
         <Button
           variant={"default"}
           onClick={() => router.push("/signin")}
-          className="bg-white hover:bg-blue-600 text-black text-xs"
+          className="bg-white hover:bg-blue-600 px-2 text-black text-xs"
         >
           Login
         </Button>
