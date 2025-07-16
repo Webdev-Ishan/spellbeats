@@ -18,6 +18,7 @@ model user {
 
   // A user can upvote many streams
   upvotes Upvotes[] @relation("UserUpvotes")
+  Reviews Reviews[] @relation("createdBy")
 }
 
 model streams {
@@ -46,6 +47,15 @@ model Upvotes {
 
   // Prevent duplicate upvotes from the same user on the same stream
   @@unique([userId, streamsId])
+}
+
+model Reviews {
+  id        String   @id @default(uuid())
+  createdAT DateTime @default(now())
+  topic     String
+  content   String
+  creator   String
+  creatorId user?    @relation("createdBy", fields: [creator], references: [id])
 }
 
 enum streamtype {
