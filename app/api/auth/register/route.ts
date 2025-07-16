@@ -95,6 +95,6 @@ export async function POST(req: NextRequest) {
       message: "Internal Server Error",
       success: false,
     },
-    { status: 500 }
+    { status: 501 }
   );
 }
