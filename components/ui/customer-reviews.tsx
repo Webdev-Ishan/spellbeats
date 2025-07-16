@@ -4,7 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, Music, Users, Calendar } from "lucide-react";
-import Image from "next/image";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+type reviews = {
+  topic: string;
+  content: string;
+  username: string;
+  createdAT: Date;
+};
+
+type backendresponse = {
+  success: boolean;
+  status: number;
+  allReviews: reviews[];
+};
 
 export default function CustomerReviews() {
   const overallStats = {
@@ -19,104 +34,28 @@ export default function CustomerReviews() {
     ],
   };
 
-  const reviews = [
-    {
-      id: 1,
-      user: {
-        name: "Alex Thompson",
-        avatar: "/placeholder.svg?height=50&width=50",
-        verified: true,
-        memberSince: "2022",
-      },
-      rating: 5,
-      title: "Best music discovery platform I've ever used!",
-      content:
-        "SoundWave has completely changed how I discover new music. The recommendations are spot-on, and I love how it connects me with artists I never would have found otherwise. The sound quality is exceptional, and the interface is so intuitive.",
-      date: "2024-01-15",
-      helpful: 24,
-      plan: "Premium",
-    },
-    {
-      id: 2,
-      user: {
-        name: "Maria Rodriguez",
-        avatar: "/placeholder.svg?height=50&width=50",
-        verified: true,
-        memberSince: "2021",
-      },
-      rating: 5,
-      title: "Perfect for music lovers",
-      content:
-        "As a musician myself, I appreciate how SoundWave supports independent artists. The platform makes it easy to discover emerging talent, and the audio quality is pristine. Customer support is also fantastic - they responded to my query within hours.",
-      date: "2024-01-12",
-      helpful: 18,
-      plan: "Premium",
-    },
-    {
-      id: 3,
-      user: {
-        name: "David Chen",
-        avatar: "/placeholder.svg?height=50&width=50",
-        verified: false,
-        memberSince: "2023",
-      },
-      rating: 4,
-      title: "Great service with minor issues",
-      content:
-        "Overall very happy with SoundWave. The music library is extensive and the discovery features are excellent. Sometimes the app can be a bit slow to load, but the quality of recommendations more than makes up for it.",
-      date: "2024-01-10",
-      helpful: 12,
-      plan: "Free",
-    },
-    {
-      id: 4,
-      user: {
-        name: "Sarah Johnson",
-        avatar: "/placeholder.svg?height=50&width=50",
-        verified: true,
-        memberSince: "2020",
-      },
-      rating: 5,
-      title: "Exceeded all my expectations",
-      content:
-        "I've tried every major streaming service, and SoundWave is by far the best. The personalized playlists are incredible, and I love the social features that let me share discoveries with friends. Worth every penny of the premium subscription.",
-      date: "2024-01-08",
-      helpful: 31,
-      plan: "Premium",
-    },
-    {
-      id: 5,
-      user: {
-        name: "Michael Brown",
-        avatar: "/placeholder.svg?height=50&width=50",
-        verified: true,
-        memberSince: "2022",
-      },
-      rating: 4,
-      title: "Solid platform with room for improvement",
-      content:
-        "SoundWave does a lot of things right. The music quality is excellent and the recommendation engine is pretty good. I'd love to see more podcast content and better offline functionality, but overall it's a great service.",
-      date: "2024-01-05",
-      helpful: 8,
-      plan: "Premium",
-    },
-    {
-      id: 6,
-      user: {
-        name: "Emma Wilson",
-        avatar: "/placeholder.svg?height=50&width=50",
-        verified: true,
-        memberSince: "2023",
-      },
-      rating: 3,
-      title: "Good but not great",
-      content:
-        "The music selection is decent and the app works well most of the time. However, I find the recommendations sometimes miss the mark, and the premium price is a bit steep compared to competitors. Still a solid choice overall.",
-      date: "2024-01-03",
-      helpful: 5,
-      plan: "Free",
-    },
-  ];
+  const [reviews, setreviews] = useState<reviews[]>([]);
+
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get<backendresponse>(`/api/reviews`);
+
+      if (response.data && response.data.success) {
+        setreviews(response.data.allReviews);
+        console.log(reviews);
+      } else {
+        toast.error("Somethign went wrong.");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error("unable to fetch Reviews.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
   const renderStars = (rating: number, size: "sm" | "md" | "lg" = "md") => {
     const sizeClasses = {
@@ -222,50 +161,23 @@ export default function CustomerReviews() {
           <div className="max-w-4xl mx-auto">
             {/* Reviews List */}
             <div className="space-y-6">
-              {reviews.map((review) => (
+              {reviews.map((review, idx) => (
                 <Card
-                  key={review.id}
+                  key={idx}
                   className="border-0 shadow-md hover:shadow-lg transition-shadow"
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <Image
-                        src={review.user.avatar || "/placeholder.svg"}
-                        alt={review.user.name}
-                        width={50}
-                        height={50}
-                        className="rounded-full"
-                      />
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2">
-                            <h3 className="font-semibold text-slate-900">
-                              {review.user.name}
-                            </h3>
-                            {review.user.verified && (
-                              <Badge variant="secondary" className="text-xs">
-                                Verified
-                              </Badge>
-                            )}
-                            <Badge variant="outline" className="text-xs">
-                              {review.plan}
-                            </Badge>
-                          </div>
                           <div className="flex items-center space-x-2 text-sm text-slate-500">
                             <Calendar className="w-4 h-4" />
-                            {new Date(review.date).toLocaleDateString()}
+                            {new Date(review.createdAT).toLocaleDateString()}
                           </div>
-                        </div>
-
-                        <div className="flex items-center space-x-2 mb-3">
-                          {renderStars(review.rating)}
-                          <span className="text-sm text-slate-600">
-                            Member since {review.user.memberSince}
-                          </span>
                         </div>
 
                         <h4 className="font-medium text-slate-900 mb-2">
-                          {review.title}
+                          {review.topic}
                         </h4>
                         <p className="text-slate-600 mb-4 leading-relaxed">
                           {review.content}
