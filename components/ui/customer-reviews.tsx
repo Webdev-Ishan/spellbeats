@@ -94,12 +94,12 @@ export default function CustomerReviews() {
           </p>
 
           {/* Overall Rating */}
-          <div className="bg-white border-1 border-black backdrop-blur-sm text-black rounded-lg p-6 max-w-md mx-auto">
-            <div className="text-4xl text-black font-bold mb-2">
+          <div className="bg-white border-1 border-black hover:bg-black transition duration-300 hover:text-white backdrop-blur-sm text-black rounded-lg p-6 max-w-md mx-auto">
+            <div className="text-4xl  font-bold mb-2">
               {overallStats.averageRating}
             </div>
             {renderStars(Math.round(overallStats.averageRating), "lg")}
-            <p className="text-black mt-2">
+            <p className=" mt-2">
               Based on {overallStats.totalReviews.toLocaleString()} reviews
             </p>
           </div>
@@ -139,14 +139,14 @@ export default function CustomerReviews() {
                 ))}
               </div>
               <div className="flex flex-col justify-center space-y-4">
-                <div className="text-center p-6 bg-green-50 rounded-lg">
+                <div className="text-center border-1 border-black p-6 bg-green-50 rounded-lg">
                   <Users className="w-8 h-8 text-green-600 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-slate-900">
                     {overallStats.totalReviews.toLocaleString()}
                   </div>
                   <div className="text-slate-600">Total Reviews</div>
                 </div>
-                <div className="text-center p-6 bg-slate-100 rounded-lg">
+                <div className="text-center p-6 border-1 border-black bg-slate-100 rounded-lg">
                   <Music className="w-8 h-8 text-slate-600 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-slate-900">87%</div>
                   <div className="text-slate-600">Would Recommend</div>
@@ -158,7 +158,7 @@ export default function CustomerReviews() {
       </section>
 
       {/* Filters and Reviews */}
-      <section className="py-12 bg-slate-50">
+      <section className="py-12 ">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Reviews List */}
@@ -166,7 +166,7 @@ export default function CustomerReviews() {
               {reviews.map((review, idx) => (
                 <Card
                   key={idx}
-                  className="border-0 shadow-md hover:shadow-lg transition-shadow"
+                  className="border-0 shadow-md hover:shadow-md hover:shadow-green-500 transition-shadow"
                 >
                   <CardContent className="p-6  border-1 border-black rounded-lg">
                     <div className="flex items-start space-x-4">
@@ -195,7 +195,7 @@ export default function CustomerReviews() {
       </section>
 
       {/* Write Review CTA */}
-      <section className="py-16 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+      <section className="py-16 bg-black text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Share Your Experience

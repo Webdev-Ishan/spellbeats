@@ -243,7 +243,7 @@ export default function Homepage() {
             {pricingPlans.map((plan, index) => (
               <Card
                 key={index}
-                className={`border-0 shadow-lg hover:shadow-xl transition-shadow relative ${
+                className={`border-1 border-black shadow-lg hover:shadow-xl transition-shadow relative ${
                   plan.popular ? "ring-2 ring-green-600" : ""
                 }`}
               >
