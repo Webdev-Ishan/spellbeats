@@ -89,9 +89,9 @@ export default function Navbar({ className }: { className?: string }) {
             <MenuItem
               setActive={setActive}
               active={active}
-              onclick={() => router.push("/Contact")}
+              onclick={() => router.push("/dashboard")}
               className="text-white text-xs"
-              item="Contact"
+              item="Dashboard"
             ></MenuItem>
             <MenuItem
               setActive={setActive}
@@ -124,8 +124,8 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink onClick={() => router.push("/TransactionList")}>
               Transaction
             </HoveredLink>
-            <HoveredLink onClick={() => router.push("/Contact")}>
-              Contact Us
+            <HoveredLink onClick={() => router.push("/dashboard")}>
+              Dashboard
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/reviews")}>
               Frequently Asked Questions

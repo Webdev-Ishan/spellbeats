@@ -1,9 +1,6 @@
+import Homepage from "../components/ui/Homepage"
 
-
-export default function Home() {
-  return (
-    <div className="bg-black w-full h-full">
-
-    </div>
-  );
+export default function Page() {
+  return <Homepage />
 }
+
