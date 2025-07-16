@@ -7,6 +7,7 @@ import { Star, Music, Users, Calendar } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type reviews = {
   topic: string;
@@ -34,6 +35,7 @@ export default function CustomerReviews() {
     ],
   };
 
+  const router = useRouter();
   const [reviews, setreviews] = useState<reviews[]>([]);
 
   const fetchReviews = async () => {
@@ -166,7 +168,7 @@ export default function CustomerReviews() {
                   key={idx}
                   className="border-0 shadow-md hover:shadow-lg transition-shadow"
                 >
-                  <CardContent className="p-6">
+                  <CardContent className="p-6  border-1 border-black rounded-lg">
                     <div className="flex items-start space-x-4">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
@@ -176,7 +178,7 @@ export default function CustomerReviews() {
                           </div>
                         </div>
 
-                        <h4 className="font-medium text-slate-900 mb-2">
+                        <h4 className="font-bold text-slate-900 mb-2">
                           {review.topic}
                         </h4>
                         <p className="text-slate-600 mb-4 leading-relaxed">
@@ -204,6 +206,7 @@ export default function CustomerReviews() {
           <Button
             size="lg"
             className="bg-green-600 hover:bg-green-700 text-white"
+            onClick={() => router.push("/givereviews")}
           >
             Write a Review
           </Button>
