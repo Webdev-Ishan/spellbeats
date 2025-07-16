@@ -137,7 +137,7 @@ export default function Homepage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => router.push("/artist")}
+                  onClick={() => router.push("/dashboard")}
                   className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
                 >
                   Explore Music
@@ -214,7 +214,7 @@ export default function Homepage() {
             <Button
               variant="outline"
               size="lg"
-              onClick={() => router.push("/dashboard")}
+              onClick={() => router.push("/artists")}
               className="bg-white hover:bg-green-500 hover:text-white"
             >
               Discover More Artists

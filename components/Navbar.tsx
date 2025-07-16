@@ -128,7 +128,7 @@ export default function Navbar({ className }: { className?: string }) {
               Dashboard
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/reviews")}>
-              Frequently Asked Questions
+              Reviews
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/about")}>
               About Us
