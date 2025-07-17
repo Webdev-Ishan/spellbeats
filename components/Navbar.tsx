@@ -23,7 +23,7 @@ export default function Navbar({ className }: { className?: string }) {
   const router = useRouter();
   return (
     <div className={cn("fixed top-3 inset-x-0 w-full z-50", className)}>
-      <nav className="flex items-center py-1 bg-slate-800 border border-white hover:shadow hover:shadow-green-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8  rounded-4xl  shadow ">
+      <nav className="flex items-center  bg-slate-800 border border-white hover:shadow hover:shadow-green-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8  rounded-4xl  shadow ">
         <div className="flex items-center justify-center gap-4">
           <Image
             width={16}
