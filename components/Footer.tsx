@@ -16,7 +16,7 @@ function Footer() {
                 <span className="text-xl font-bold">SpellBeats</span>
               </div>
               <p className="text-slate-400">
-                Connecting the world through music, one song at a time.
+                Connecting the world through podcasts, one lesson at a time.
               </p>
             </div>
             <div>

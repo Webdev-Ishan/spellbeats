@@ -25,9 +25,9 @@ export default function Homepage() {
   const features = [
     {
       icon: Music,
-      title: "100M+ Songs",
+      title: "100M+ Pods",
       description:
-        "Access to the world's largest music library with new releases daily",
+        "Access to the world's largest podcast library with new releases daily",
     },
     {
       icon: Zap,
@@ -45,17 +45,17 @@ export default function Homepage() {
       icon: Users,
       title: "Social Features",
       description:
-        "Share music, create collaborative playlists, and connect with friends",
+        "Share pods, create collaborative playlists, and connect with friends",
     },
     {
       icon: Smartphone,
       title: "Offline Listening",
-      description: "Download your favorite tracks and listen anywhere, anytime",
+      description: "Download your favorite podcasts and listen anywhere, anytime",
     },
     {
       icon: Shield,
       title: "Ad-Free Experience",
-      description: "Uninterrupted music streaming with premium subscription",
+      description: "Uninterrupted audio streaming with premium subscription",
     },
   ];
 
@@ -66,7 +66,7 @@ export default function Homepage() {
       period: "forever",
       features: [
         "Limited skips",
-        "Ads between songs",
+        "Ads between Podcasts",
         "Standard audio quality",
         "Mobile app access",
       ],
@@ -102,7 +102,7 @@ export default function Homepage() {
 
   const stats = [
     { icon: Users, value: "50M+", label: "Active Users" },
-    { icon: Music, value: "100M+", label: "Songs" },
+    { icon: Music, value: "10M+", label: "Pods" },
     { icon: Globe, value: "180+", label: "Countries" },
     { icon: Award, value: "15+", label: "Industry Awards" },
   ];
@@ -118,12 +118,12 @@ export default function Homepage() {
                 🎵 New: AI-Powered Playlists
               </Badge>
               <h1 className="text-4xl lg:text-6xl text-green-500 font-bold mb-6 leading-tight">
-                Your Music, Your World, Your Way
+                Your PodCast, Your World, Your Way
               </h1>
               <p className="text-xl lg:text-2xl text-white mb-8 leading-relaxed">
-                Discover, stream, and share music like never before. Join
-                millions of music lovers on the platform that puts artists and
-                fans first.
+                Discover, stream, and share your pods like never before. Join
+                millions of knowledge lovers on the platform that puts artists and
+                users first.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <Button
@@ -140,7 +140,7 @@ export default function Homepage() {
                   onClick={() => router.push("/dashboard")}
                   className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
                 >
-                  Explore Music
+                  Explore PodCast
                 </Button>
               </div>
 
@@ -217,7 +217,7 @@ export default function Homepage() {
               onClick={() => router.push("/artists")}
               className="bg-white hover:bg-green-500 hover:text-white"
             >
-              Discover More Artists
+              Discover More Listener
               <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
@@ -292,10 +292,10 @@ export default function Homepage() {
       <section className="py-20 bg-black text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-            Ready to Start Your Musical Journey?
+            Ready to Start Your Learning Journey?
           </h2>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-8">
-            Join millions of music lovers and discover your next favorite song
+            Join millions of knowledge seakers and discover your next favorite podcasts
             today
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
