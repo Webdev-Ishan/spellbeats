@@ -38,7 +38,7 @@ export default function AboutUs() {
     },
     {
       name: "David Kim",
-      role: "Head of Music Partnerships",
+      role: "Head of Youtube Partnerships",
       image: "/placeholder.svg?height=300&width=300",
       bio: "Industry veteran with deep connections across record labels",
     },
@@ -46,7 +46,7 @@ export default function AboutUs() {
 
   const stats = [
     { icon: Users, value: "50M+", label: "Active Users" },
-    { icon: Music, value: "100M+", label: "Songs" },
+    { icon: Music, value: "10M+", label: "Pods" },
     { icon: Globe, value: "180+", label: "Countries" },
     { icon: Award, value: "15+", label: "Industry Awards" },
   ];
@@ -54,19 +54,19 @@ export default function AboutUs() {
   const values = [
     {
       icon: Heart,
-      title: "Music First",
+      title: "Value First",
       description:
-        "Every decision we make puts music and artists at the center",
+        "Every decision we make puts listners and artists at the center",
     },
     {
       icon: Users,
       title: "Community Driven",
-      description: "Building connections between artists and fans worldwide",
+      description: "Building connections between creators and fans worldwide",
     },
     {
       icon: Star,
       title: "Innovation",
-      description: "Pioneering new ways to discover and experience music",
+      description: "Pioneering new ways to discover and experience podcasts",
     },
     {
       icon: Headphones,
@@ -86,11 +86,11 @@ export default function AboutUs() {
             About SpellBeats
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Connecting the World Through Music
+            Connecting the World Through Audio lessons
           </h1>
           <p className="text-xl md:text-2xl text-green-100 max-w-3xl mx-auto mb-8">
-            We are on a mission to make music discovery magical and bring
-            artists closer to their fans than ever before.
+            We are on a mission to make knowledge discovery magical and bring
+            creators closer to their listners than ever before.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             {stats.map((stat, index) => (
@@ -118,20 +118,21 @@ export default function AboutUs() {
               <div className="space-y-4 text-slate-600 text-lg">
                 <p>
                   Founded in 2018, SpellBeats began as a simple idea: what if
-                  discovering new music could be as exciting as hearing your
-                  favorite song for the first time?
+                  discovering new youtube vedios could be as exciting as hearing
+                  your favorite song ?
                 </p>
                 <p>
-                  Our founders, frustrated with algorithmic recommendations that
-                  felt cold and impersonal, set out to create a platform that
-                  celebrates the human connection to music. We believe that the
-                  best music discoveries happen through shared experiences,
-                  cultural moments, and genuine passion.
+                  Our founders, frustrated with visual distractions that felt
+                  cold,impersonal and lead to distraction, set out to create a
+                  platform that provides vedio in audio files to prevent
+                  distraction . We believe that the best knowledge discoveries
+                  happen through shared experiences, cultural moments, and
+                  genuine passion.
                 </p>
                 <p>
-                  Today, we are proud to serve over 50 million music lovers
-                  worldwide, helping them discover their next favorite artist
-                  while supporting musicians in reaching new audiences.
+                  Today, we are proud to serve over 50 million listners
+                  worldwide, helping them discover their next favorite creator
+                  while supporting creators in reaching new audiences.
                 </p>
               </div>
               <Button
@@ -237,9 +238,9 @@ export default function AboutUs() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h2>
           <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto mb-8">
-            To democratize music discovery and create a world where every artist
+            To democratize knowledge and create a world where every artist
             has the opportunity to be heard, and every listener can find their
-            perfect soundtrack to life.
+            perfect podcast to life.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -259,8 +260,6 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
-
-      
     </div>
   );
 }
