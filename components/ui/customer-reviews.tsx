@@ -90,7 +90,7 @@ export default function CustomerReviews() {
             What Our Users Say
           </h1>
           <p className="text-xl text-white max-w-2xl mx-auto mb-8">
-            Real feedback from music lovers around the world
+            Real feedback from listners around the world
           </p>
 
           {/* Overall Rating */}
@@ -201,7 +201,7 @@ export default function CustomerReviews() {
             Share Your Experience
           </h2>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-8">
-            Help other music lovers discover what makes SoundWave special
+            Help other listners discover what makes SpellBeats special
           </p>
           <Button
             size="lg"

@@ -54,7 +54,7 @@ export default function AllArtists() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">All Artists</h1>
           <p className="text-xl  max-w-2xl mx-auto">
             Explore talented artists from around the world and discover your
-            next favorite musician
+            next favorite creator
           </p>
         </div>
       </section>
