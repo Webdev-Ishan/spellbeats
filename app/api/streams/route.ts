@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       a.width < b.width ? -1 : 1
     );
 
-    const uploadResponse = await uploadToCloudinary();
+    const uploadResponse = await uploadToCloudinary(url);
     if (!uploadResponse.success) {
       return NextResponse.json(
         { success: true, message: uploadResponse.error },

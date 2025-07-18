@@ -7,10 +7,9 @@ type UploadResponse =
   | { success: false; error: UploadApiErrorResponse };
 
 export async function uploadToCloudinary(
-  
+  vedioURL: string
 ): Promise<UploadResponse> {
-  const url = "https://youtu.be/aqz-KE-bpKQ";
-  const audioStream = ytdl(url, { filter: "audioonly" });
+  const audioStream = ytdl(vedioURL, { filter: "audioonly" });
 
   return new Promise((resolve) => {
     const uploadStream = cloudinary.uploader.upload_stream(
