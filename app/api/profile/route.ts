@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
-    if (!token || token.id) {
+    if (!token || !token.id) {
       return NextResponse.json(
         {
           success: false,
@@ -20,6 +20,15 @@ export async function GET(req: NextRequest) {
     const exist = await prisma.user.findUnique({
       where: {
         id: userid,
+      },
+      include: {
+        streams: {
+          select: {
+            title: true,
+            id: true,
+            bigImage: true,
+          },
+        },
       },
     });
 

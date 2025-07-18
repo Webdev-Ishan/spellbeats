@@ -2,195 +2,167 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import axios from "axios";
 
-import {
-  Users,
-  Music,
-  Clock,
-  Calendar,
-  MapPin,
-  Settings,
-  Share2,
-  Headphones,
-} from "lucide-react";
+type stream = {
+  id: string;
+  title: string;
+  bigImage: string;
+};
+
+type backendresponse = {
+  success: boolean;
+  message?: string;
+  status: number;
+  exist: {
+    username: string;
+    email: string;
+    Bio: string;
+    Sharable: string;
+    streams: stream[];
+  };
+};
+import { Calendar, Settings } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function UserProfile() {
-  const userInfo = {
-    name: "Alex Thompson",
-    username: "@alexthompson",
-    avatar: "/placeholder.svg?height=200&width=200",
-    coverImage: "/placeholder.svg?height=300&width=800",
-    bio: "Music lover, playlist curator, and indie rock enthusiast. Always discovering new sounds and sharing great music with friends.",
-    location: "San Francisco, CA",
-    joinDate: "March 2022",
-    isVerified: false,
-    stats: {
-      totalStreams: 15420,
-      hoursListened: 2340,
-      followingArtists: 127,
-      playlistsCreated: 23,
-      favoriteGenres: ["Indie Rock", "Electronic", "Jazz"],
-    },
-  };
+  const { data: session, status } = useSession();
 
-  const playlists = [
-    {
-      id: 1,
-      name: "Indie Discoveries",
-      songCount: 47,
-      thumbnail: "/placeholder.svg?height=100&width=100",
-      isPublic: true,
-    },
-    {
-      id: 2,
-      name: "Late Night Vibes",
-      songCount: 32,
-      thumbnail: "/placeholder.svg?height=100&width=100",
-      isPublic: true,
-    },
-    {
-      id: 3,
-      name: "Workout Mix",
-      songCount: 28,
-      thumbnail: "/placeholder.svg?height=100&width=100",
-      isPublic: false,
-    },
-  ];
+  const router = useRouter();
 
-  const formatNumber = (num: number) => {
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "K";
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/");
     }
-    return num.toString();
+  }, [session, status, router]);
+
+  const [username, setusername] = useState("");
+  const [email, setemail] = useState("");
+  const [bio, setbio] = useState("");
+  const [sharable, setsharable] = useState("");
+  const [playlist, setplaylist] = useState<stream[]>([]);
+
+  const fetchUserinfo = async () => {
+    try {
+      const userinfo = await axios.get<backendresponse>("/api/profile");
+
+      if (userinfo.data && userinfo.data.success) {
+        setusername(userinfo.data.exist.username);
+        setemail(userinfo.data.exist.email);
+        setbio(userinfo.data.exist.Bio);
+        setplaylist(userinfo.data.exist.streams);
+        setsharable(userinfo.data.exist.Sharable);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const status = error.response.status;
+
+        if (status === 401) {
+          toast.error("Please login first!");
+        } else if (status === 404) {
+          toast.error("User not found!!");
+        } else if (status == 500) {
+          toast.error("Soemthing went wrong");
+        }
+      } else {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          console.log(error);
+        }
+      }
+    }
   };
+
+  useEffect(() => {
+    fetchUserinfo();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-green-500">
-      {/* Profile Header */}
-      <section className="relative">
-        <div className="h-64 bg-black"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-
-        <div className="container mx-auto px-4">
-          <div className="relative -mt-20 pb-8">
-            <div className="flex flex-col md:flex-row items-start md:items-end space-y-4 md:space-y-0 md:space-x-6">
-              <div className="flex-1 text-white">
-                <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                  {userInfo.name}
-                </h1>
-                <p className="text-green-100 text-lg mb-2">
-                  {userInfo.username}
-                </p>
-                <p className="text-green-100 mb-4 max-w-2xl">{userInfo.bio}</p>
-
-                <div className="flex flex-wrap items-center gap-4 text-sm text-green-100">
-                  <div className="flex items-center space-x-1">
-                    <MapPin className="w-4 h-4" />
-                    <span>{userInfo.location}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>Joined {userInfo.joinDate}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <Button
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
-                >
-                  <Settings className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-600 to-green-500 text-white">
+      {/* Header Section */}
+      <section className="relative bg-black py-16 px-4 md:px-12">
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          You are Important to Us.
+        </h1>
+        <p className="text-lg text-green-300 max-w-xl">
+          Your profile represents your voice on our platform.
+        </p>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-8 bg-white border-b border-slate-200">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <Headphones className="w-6 h-6 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900">
-                {formatNumber(userInfo.stats.totalStreams)}
-              </div>
-              <div className="text-sm text-slate-600">Total Streams</div>
-            </div>
-            <div className="text-center">
-              <Clock className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900">
-                {formatNumber(userInfo.stats.hoursListened)}
-              </div>
-              <div className="text-sm text-slate-600">Hours Listened</div>
-            </div>
-            <div className="text-center">
-              <Users className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900">
-                {userInfo.stats.followingArtists}
-              </div>
-              <div className="text-sm text-slate-600">Following Artists</div>
-            </div>
-            <div className="text-center">
-              <Music className="w-6 h-6 text-orange-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-slate-900">
-                {userInfo.stats.playlistsCreated}
-              </div>
-              <div className="text-sm text-slate-600">Playlists Created</div>
+      {/* Profile Info Card */}
+      <div className="container mx-auto px-4 md:px-8 mt-16">
+        <div className="bg-white text-black rounded-xl shadow-lg p-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 md:space-x-8">
+          {/* Left: Info */}
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold text-green-600 mb-2">
+              {username}
+            </h2>
+            <p className="text-gray-700 mb-4">{bio}</p>
+            <div className="text-sm flex items-center gap-2 text-gray-600">
+              <Calendar className="w-4 h-4" />
+              <span>
+                Joined by:{" "}
+                <span className="text-green-700 font-medium">{email}</span>
+              </span>
             </div>
           </div>
-        </div>
-      </section>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* User Playlists */}
-        <Card className="border-0 shadow-lg">
+          {/* Right: Buttons & Share */}
+          <div className="flex flex-col gap-4">
+            <div className="text-sm text-gray-700">
+              <span className="mr-2">Share:</span>
+              <span className="text-blue-600 font-semibold">{sharable}</span>
+            </div>
+            <Button className="bg-green-600 hover:bg-green-700 text-white">
+              <Settings className="w-4 h-4 mr-2" />
+              Edit Profile
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Playlist Section */}
+      <div className="container mx-auto px-4 md:px-8 py-12">
+        <Card className="shadow-xl bg-white">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">My Playlist</h2>
-              <Button
-                size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white"
-              >
+              <h2 className="text-2xl font-bold text-green-700">My Playlist</h2>
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
                 Add to Playlist
               </Button>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4">
-              {playlists.map((playlist) => (
-                <Card
-                  key={playlist.id}
-                  className="border border-slate-200 hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="p-4">
-                    <Image
-                      src={playlist.thumbnail || "/placeholder.svg"}
-                      alt={playlist.name}
-                      width={100}
-                      height={100}
-                      className="rounded-md w-full aspect-square object-cover mb-3"
-                    />
-                    <h3 className="font-medium text-slate-900 mb-1">
-                      {playlist.name}
-                    </h3>
-                    <p className="text-sm text-slate-600 mb-2">
-                      {playlist.songCount} songs
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {playlist.length > 0 ? (
+              <div className="grid md:grid-cols-3 gap-6">
+                {playlist.map((playlist) => (
+                  <Card
+                    key={playlist.id}
+                    className="hover:shadow-lg transition-shadow rounded-md border border-gray-200"
+                  >
+                    <CardContent className="p-4">
+                      <Image
+                        src={playlist.bigImage || "/placeholder.svg"}
+                        alt={playlist.title}
+                        width={100}
+                        height={100}
+                        className="rounded-md w-full aspect-square object-cover mb-3"
+                      />
+                      <h3 className="font-semibold text-slate-800 mb-1">
+                        {playlist.title}
+                      </h3>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-8">
+                No items in your playlist yet.
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>
