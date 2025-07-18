@@ -1,21 +1,17 @@
 import { prisma } from "@/lib/DB";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { streamtype } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import youtubesearchapi from "youtube-search-api";
+import { uploadToCloudinary } from "@/helpers/cloudinaryUpload";
 
 // ✅ Regex Definitions
 const youtubeRegex =
   /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-const spotifyRegex =
-  /^(?:https?:\/\/)?(?:open\.)?spotify\.com\/(track|album|playlist|episode)\/([a-zA-Z0-9]{22})(?:\?.*)?$/;
 const youtubeIdRegex = /^[a-zA-Z0-9_-]{11}$/;
-const spotifyIdRegex = /^[a-zA-Z0-9]{22}$/;
 
 // ✅ Zod schema with enum validation
 const streamSchema = z.object({
-  type: z.nativeEnum(streamtype),
   active: z.boolean().default(true),
   url: z.string(),
   extractedid: z.string(),
@@ -41,16 +37,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { url, extractedid, type, active } = parsedBody.data;
+  const { url, extractedid, active } = parsedBody.data;
 
   const isYoutube = youtubeRegex.test(url);
-  const isSpotify = spotifyRegex.test(url);
   const validYTid = youtubeIdRegex.test(extractedid);
-  const validSpotifyid = spotifyIdRegex.test(extractedid);
 
-  if ((!isYoutube && !isSpotify) || (!validYTid && !validSpotifyid)) {
+  if (!isYoutube || !validYTid) {
     return NextResponse.json(
-      { success: false, message: "Invalid YouTube/Spotify URL or ID" },
+      { success: false, message: "Invalid YouTube URL or ID" },
       { status: 400 }
     );
   }
@@ -75,14 +69,24 @@ export async function POST(req: NextRequest) {
       a.width < b.width ? -1 : 1
     );
 
+    const uploadResponse = await uploadToCloudinary();
+    if (!uploadResponse.success) {
+      return NextResponse.json(
+        { success: true, message: uploadResponse.error },
+        { status: 403 }
+      );
+    }
+
+    const cloudinaryURL: string = uploadResponse.url;
+
     const newStream = await prisma.streams.create({
       data: {
-        type,
         active,
         url,
         extractedid,
         userId: token.id.toString(),
         title,
+        cloudinaryURL,
         smallImage:
           (thumbnails.length > 1
             ? thumbnails[thumbnails.length - 2].url
@@ -137,7 +141,6 @@ export async function GET(req: NextRequest) {
           select: {
             id: true,
             url: true,
-            type: true,
             active: true,
             extractedid: true,
             title: true,

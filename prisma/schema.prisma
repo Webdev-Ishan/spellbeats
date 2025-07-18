@@ -22,17 +22,16 @@ model user {
 }
 
 model streams {
-  id            String     @id @default(uuid())
-  type          streamtype
-  active        Boolean    @default(true)
+  id            String  @id @default(uuid())
+  active        Boolean @default(true)
   url           String
   extractedid   String
-  title         String     @default("")
-  bigImage      String     @default("")
-  smallImage    String     @default("")
+  title         String  @default("")
+  bigImage      String  @default("")
+  smallImage    String  @default("")
   cloudinaryURL String
   userId        String
-  creator       user       @relation("UserStreams", fields: [userId], references: [id])
+  creator       user    @relation("UserStreams", fields: [userId], references: [id])
 
   upvotes Upvotes[] @relation("StreamUpvotes")
 }
@@ -57,9 +56,4 @@ model Reviews {
   content   String
   creator   String
   creatorId user?    @relation("createdBy", fields: [creator], references: [id])
-}
-
-enum streamtype {
-  Spotify
-  Youtube
 }
