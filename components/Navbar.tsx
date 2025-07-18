@@ -83,7 +83,7 @@ export default function Navbar({ className }: { className?: string }) {
               setActive={setActive}
               active={active}
               className="text-white text-xs"
-              onclick={() => router.push("/Profile")}
+              onclick={() => router.push("/profile")}
               item="Profile"
             ></MenuItem>
             <MenuItem
@@ -118,7 +118,7 @@ export default function Navbar({ className }: { className?: string }) {
         <div className="md:hidden bg-slate-800 shadow px-4 py-2">
           <div className="flex flex-col space-y-2">
             <HoveredLink onClick={() => router.push("/")}>Home</HoveredLink>
-            <HoveredLink onClick={() => router.push("/Profile")}>
+            <HoveredLink onClick={() => router.push("/profile")}>
               Profile
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/artists")}>
