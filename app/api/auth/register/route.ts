@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import bcrypt from "bcrypt";
 import { Resend } from "resend";
+import { generateRandomString } from "@/helpers/sharable";
 
 const registerSchema = z.object({
   username: z.string().min(3).max(20),
   email: z.string(),
   password: z.string().min(6).max(12),
+  bio: z.string().min(6).max(150),
 });
 const salt_value = process.env.salt_value;
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -26,7 +28,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { email, password, username } = parsedBody.data;
+  const { email, password, username, bio } = parsedBody.data;
 
   try {
     const existUser = await prisma.user.findUnique({
@@ -45,12 +47,15 @@ export async function POST(req: NextRequest) {
 
     const salt = await bcrypt.genSalt(Number(salt_value));
     const hahshedPassword = await bcrypt.hash(password, salt);
+    const shareLink = await generateRandomString(10);
 
     const newUser = await prisma.user.create({
       data: {
         username: username,
         email: email,
         password: hahshedPassword,
+        Bio: bio,
+        Sharable: shareLink,
       },
     });
 

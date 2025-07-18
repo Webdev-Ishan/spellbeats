@@ -72,7 +72,7 @@ export default function Reviews() {
           </div>
 
           <LabelInputContainer className="mb-4 text-white">
-            <Label htmlFor="content">Content Address</Label>
+            <Label htmlFor="content">Content </Label>
             <Input
               id="content"
               placeholder=""

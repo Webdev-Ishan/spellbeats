@@ -17,6 +17,7 @@ const registerSchema = z.object({
   username: z.string().min(3).max(20),
   email: z.string(),
   password: z.string().min(6).max(12),
+  bio: z.string().min(6).max(150),
 });
 
 export default function SignupForm() {
@@ -25,6 +26,7 @@ export default function SignupForm() {
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [bio, setbio] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ export default function SignupForm() {
       username,
       email,
       password,
+      bio,
     });
 
     if (!parsedbody.success) {
@@ -42,7 +45,7 @@ export default function SignupForm() {
       setemail("");
       setpassword("");
       setusername("");
-
+      setbio("");
       return;
     }
 
@@ -85,6 +88,7 @@ export default function SignupForm() {
       setemail("");
       setusername("");
       setpassword("");
+      setbio("");
     }
   };
   return (
@@ -98,7 +102,7 @@ export default function SignupForm() {
         </p>
 
         <form className="my-8" onSubmit={handleSubmit}>
-          <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+          <div className="mb-12 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
             <LabelInputContainer>
               <Label htmlFor="firstname">Username</Label>
               <Input
@@ -131,6 +135,16 @@ export default function SignupForm() {
             />
           </LabelInputContainer>
 
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="Bio">Bio</Label>
+            <Input
+              id="bio"
+              placeholder="I am ...."
+              type="text"
+              value={bio}
+              onChange={(e) => setbio(e.target.value)}
+            />
+          </LabelInputContainer>
           <button
             className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br bg-black font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
