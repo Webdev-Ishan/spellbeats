@@ -180,7 +180,7 @@ export default function Homepage() {
               Everything You Need
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Powerful features designed to enhance your music experience
+              Powerful features designed to enhance your listening experience
             </p>
           </div>
 

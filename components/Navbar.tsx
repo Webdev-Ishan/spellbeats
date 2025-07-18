@@ -75,9 +75,9 @@ export default function Navbar({ className }: { className?: string }) {
             <MenuItem
               setActive={setActive}
               active={active}
-              onclick={() => router.push("/TransactionList")}
+              onclick={() => router.push("/artists")}
               className="text-white text-xs"
-              item="Transaction"
+              item="Creators"
             ></MenuItem>
             <MenuItem
               setActive={setActive}
@@ -121,8 +121,8 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink onClick={() => router.push("/Profile")}>
               Profile
             </HoveredLink>
-            <HoveredLink onClick={() => router.push("/TransactionList")}>
-              Transaction
+            <HoveredLink onClick={() => router.push("/artists")}>
+              Creators
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/dashboard")}>
               Dashboard

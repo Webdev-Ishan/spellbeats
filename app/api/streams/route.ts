@@ -132,22 +132,9 @@ export async function GET(req: NextRequest) {
 
     const userid = token.id.toString();
 
-    const upvotedStreams = await prisma.upvotes.findMany({
+    const upvotedStreams = await prisma.streams.findMany({
       where: {
         userId: userid,
-      },
-      select: {
-        streams: {
-          select: {
-            id: true,
-            url: true,
-            active: true,
-            extractedid: true,
-            title: true,
-            bigImage: true,
-            smallImage: true,
-          },
-        },
       },
     });
 
