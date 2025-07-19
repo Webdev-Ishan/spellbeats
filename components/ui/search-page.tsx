@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Music } from "lucide-react";
+import { Search, Music, Heart } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -25,6 +25,12 @@ type backendresponse = {
   result: stream[];
 };
 
+type backendresponse2 = {
+  success: boolean;
+  status: number;
+  result: stream[];
+};
+
 const queryschema = z.object({
   query: z.string(),
 });
@@ -32,7 +38,7 @@ const queryschema = z.object({
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<stream[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [upvote, setupvote] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,6 +57,47 @@ export default function SearchPage() {
       if (response.data && response.data.success) {
         setSearchResults(response.data.result);
         console.log(response.data);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const status = error.response.status;
+
+        if (status === 401) {
+          toast.error("Please login first!");
+        } else if (status === 404) {
+          toast.error("User not found!!");
+        } else if (status == 500) {
+          toast.error("Soemthing went wrong");
+          console.log(error);
+        }
+      } else {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          console.log(error);
+        }
+      }
+    }
+  };
+
+  const hanldevote = async (id: string) => {
+    try {
+      if (upvote === false) {
+        const result = await axios.post<backendresponse2>("/api/upvote", {
+          streamid: id,
+        });
+
+        if (result.data && result.data.success) {
+          setupvote(true);
+         
+        }
+      } else {
+        const result = await axios.post("/api/downvote", {
+          streamid: id,
+        });
+
+        if (result.data && result.data.success) {
+          setupvote(false);
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -111,27 +158,8 @@ export default function SearchPage() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Loading State */}
-            {isLoading && (
-              <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Card key={i} className="border-0 shadow-md">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-4 animate-pulse">
-                        <div className="w-16 h-16 bg-slate-200 rounded-md"></div>
-                        <div className="flex-1 space-y-2">
-                          <div className="h-4 bg-slate-200 rounded w-1/3"></div>
-                          <div className="h-3 bg-slate-200 rounded w-1/4"></div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-
             {/* Search Results */}
-            {!isLoading && searchResults.length > 0 && (
+            {searchResults.length > 0 && (
               <div className="space-y-4">
                 {searchResults.map((song, idx) => (
                   <Card
@@ -158,6 +186,14 @@ export default function SearchPage() {
                             {song.creator.username}
                           </p>
                         </div>
+                        <Button
+                            variant="ghost"
+                            onClick={() => hanldevote(song.id)}
+                            size="sm"
+                            className={upvote ? "text-green-500 " : "text-gray-400"}
+                        >
+                            <Heart fill={upvote ? "#22c55e" : "none"} />
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -166,7 +202,7 @@ export default function SearchPage() {
             )}
 
             {/* Empty State */}
-            {!isLoading && searchQuery && searchResults.length === 0 && (
+            {searchQuery && searchResults.length === 0 && (
               <div className="text-center py-16">
                 <Music className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">
