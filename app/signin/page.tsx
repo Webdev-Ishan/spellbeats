@@ -141,6 +141,13 @@ export default function SignInForm() {
             Login with Github
           </div>
         </button>
+
+         <div
+          onClick={() => router.push("/register")}
+          className="w-full text-blue-500 mt-2 cursor-pointer flex justify-center items-center gap-4"
+        >
+          Create an account?
+        </div>
       </div>
     </>
   );

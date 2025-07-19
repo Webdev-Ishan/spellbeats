@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   if (!parsedBody.success) {
     return NextResponse.json(
       { success: false, message: "Invalid body structure" },
-      { status: 400 }
+      { status: 401 }
     );
   }
 
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
   if (!isYoutube || !validYTid) {
     return NextResponse.json(
       { success: false, message: "Invalid YouTube URL or ID" },
-      { status: 400 }
+      { status: 402 }
     );
   }
 

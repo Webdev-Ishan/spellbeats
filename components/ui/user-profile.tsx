@@ -54,7 +54,7 @@ export default function UserProfile() {
         setusername(userinfo.data.exist.username);
         setemail(userinfo.data.exist.email);
         setbio(userinfo.data.exist.Bio);
-        setplaylist(userinfo.data.exist.streams);
+        setplaylist(userinfo.data.exist.streams.slice(0,3));
         setsharable(userinfo.data.exist.Sharable);
       }
     } catch (error) {
@@ -130,28 +130,31 @@ export default function UserProfile() {
         <Card className="shadow-xl bg-white">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-green-700">My Playlist</h2>
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
+              <h2 className="text-2xl font-bold text-green-500">My Playlist</h2>
+              <Button onClick={()=>router.push("/add-stream")} className="bg-green-500 hover:bg-green-600 text-white">
                 Add to Playlist
+              </Button>
+              <Button onClick={()=>router.push("/all-streams")} className="bg-green-500 hover:bg-green-600 text-white">
+                View Playlist
               </Button>
             </div>
 
             {playlist.length > 0 ? (
               <div className="grid md:grid-cols-3 gap-6">
-                {playlist.map((playlist) => (
+                {playlist.map((playlist,idx) => (
                   <Card
-                    key={playlist.id}
-                    className="hover:shadow-lg transition-shadow rounded-md border border-gray-200"
+                    key={idx}
+                    className="hover:shadow-lg p-4 border-2 border-black hover:border-green-500 rounded-lg transition-shadow "
                   >
-                    <CardContent className="p-4">
+                    <CardContent >
                       <Image
                         src={playlist.bigImage || "/placeholder.svg"}
                         alt={playlist.title}
                         width={100}
                         height={100}
-                        className="rounded-md w-full aspect-square object-cover mb-3"
+                        className="rounded-md border-1 border-green-500 w-full aspect-square object-cover mb-3"
                       />
-                      <h3 className="font-semibold text-slate-800 mb-1">
+                      <h3 className="font-semibold bg-black text-white text-center pb-1 border rounded-lg mb-1">
                         {playlist.title}
                       </h3>
                     </CardContent>

@@ -146,13 +146,20 @@ export default function SignupForm() {
             />
           </LabelInputContainer>
           <button
-            className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br bg-black font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+            className="group/btn relative block h-10 mb-4 w-full rounded-md bg-gradient-to-br bg-black font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
           >
             Sign up &rarr;
             <BottomGradient />
           </button>
         </form>
+        
+         <div
+          onClick={() => router.push("/signin")}
+          className="w-full text-blue-500 mt-4 cursor-pointer flex justify-center items-center gap-4"
+        >
+          Already have an account?
+        </div>
       </div>
     </>
   );
