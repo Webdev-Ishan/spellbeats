@@ -132,13 +132,13 @@ export async function GET(req: NextRequest) {
 
     const userid = token.id.toString();
 
-    const upvotedStreams = await prisma.streams.findMany({
+    const streams = await prisma.streams.findMany({
       where: {
         userId: userid,
       },
     });
 
-    if (!upvotedStreams) {
+    if (!streams) {
       return NextResponse.json(
         { success: false, message: "Unable to fetch streams." },
         { status: 404 }
@@ -146,7 +146,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: true, upvotedStreams },
+      { success: true, streams },
       { status: 200 }
     );
   } catch (error) {

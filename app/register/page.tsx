@@ -93,7 +93,7 @@ export default function SignupForm() {
   };
   return (
     <>
-      <div className="shadow-input mx-auto mt-10 w-full max-w-md rounded-none bg-slate-800 p-4 md:rounded-2xl md:p-8 ">
+      <div className="shadow-input p-4 mx-auto mb-12 mt-10 w-full max-w-md rounded-none bg-slate-800  md:rounded-2xl md:p-8 ">
         <h2 className="text-xl font-bold text-green-500">
           Welcome to SpellBeats
         </h2>
@@ -101,7 +101,7 @@ export default function SignupForm() {
           Subscribe to SpellBeats for best user experience
         </p>
 
-        <form className="my-8" onSubmit={handleSubmit}>
+        <form className="my-12" onSubmit={handleSubmit}>
           <div className="mb-12 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
             <LabelInputContainer>
               <Label htmlFor="firstname">Username</Label>
