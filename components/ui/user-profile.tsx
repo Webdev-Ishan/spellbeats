@@ -117,7 +117,10 @@ export default function UserProfile() {
               <span className="mr-2">Share:</span>
               <span className="text-blue-600 font-semibold">{sharable}</span>
             </div>
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
+            <Button
+              onClick={() => router.push("/editprofile")}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
               <Settings className="w-4 h-4 mr-2" />
               Edit Profile
             </Button>
