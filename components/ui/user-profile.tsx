@@ -82,7 +82,7 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-600 to-green-500 text-white">
+    <div className="min-h-screen bg-green-500 text-white">
       {/* Header Section */}
       <section className="relative bg-black py-16 px-4 md:px-12">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
@@ -95,7 +95,7 @@ export default function UserProfile() {
 
       {/* Profile Info Card */}
       <div className="container mx-auto px-4 md:px-8 mt-16">
-        <div className="bg-white text-black rounded-xl shadow-lg p-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 md:space-x-8">
+        <div className="bg-white border-1 border-black text-black rounded-xl shadow-lg p-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 md:space-x-8">
           {/* Left: Info */}
           <div className="flex-1">
             <h2 className="text-3xl font-bold text-green-600 mb-2">
@@ -129,8 +129,8 @@ export default function UserProfile() {
       </div>
 
       {/* Playlist Section */}
-      <div className="container mx-auto px-4 md:px-8 py-12">
-        <Card className="shadow-xl bg-white">
+      <div className="container  mx-auto px-4 md:px-8 py-12">
+        <Card className="shadow-xl border-1 border-black bg-white">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-green-500">My Playlist</h2>
