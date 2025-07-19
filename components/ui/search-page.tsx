@@ -9,6 +9,7 @@ import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-toastify";
 import z from "zod";
+import { useRouter } from "next/navigation";
 
 type stream = {
   id: string;
@@ -40,6 +41,7 @@ export default function SearchPage() {
   const [searchResults, setSearchResults] = useState<stream[]>([]);
   const [upvote, setupvote] = useState(false);
 
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -164,6 +166,7 @@ export default function SearchPage() {
                 {searchResults.map((song, idx) => (
                   <Card
                     key={idx}
+                    onClick={()=>router.push(`/player/?id=${encodeURIComponent(song.id)}`)}
                     className="border-1 border-black hover:border-green-500 shadow-md  hover:shadow-green-500 transition-shadow"
                   >
                     <CardContent className="p-4">
