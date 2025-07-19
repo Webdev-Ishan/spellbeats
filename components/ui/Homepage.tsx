@@ -137,7 +137,7 @@ export default function Homepage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => router.push("/dashboard")}
+                  onClick={() => router.push("/search")}
                   className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
                 >
                   Explore PodCast
