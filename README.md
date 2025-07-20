@@ -59,12 +59,20 @@ npm install
 
 ### 2. Configure Environment
 
-Create a `.env` file:
+Create a `.env` file with sample values:
 
 ```env
-DATABASE_URL=your_postgres_connection_string
+DATABASE_URL=postgresql://user:password@host:port/dbname
+NODE_ENV=development
 NEXT_AUTH_SECRET=your_nextauth_secret
-CLOUDINARY_URL=your_cloudinary_url
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GITHUB_ID=your_github_client_id
+GITHUB_SECRET=your_github_client_secret
+salt_value=your_salt_value
+RESEND_API_KEY=your_resend_api_key
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
 ```
 
 ### 3. Set Up Database
@@ -143,4 +151,4 @@ Built by [Ishan Saini], inspired by the best practices in full-stack development
 
 ---
 
-> \_“Code is poetry. Music is magic. SpellCode brings them
+
