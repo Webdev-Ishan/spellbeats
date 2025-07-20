@@ -19,7 +19,14 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import placeholder from '../../public/logo.png'
+import placeholder from "../../public/logo.png";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+type upvote = {
+  userId: string;
+};
+
 type backendresponse = {
   success: boolean;
   status: number;
@@ -31,7 +38,13 @@ type backendresponse = {
     creator: {
       username: string;
     };
+    upvotes: upvote[];
   };
+};
+
+type backendresponse2 = {
+  success: boolean;
+  status: number;
 };
 
 export default function MusicPlayer() {
@@ -39,20 +52,38 @@ export default function MusicPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(245); // fallback duration
   const [volume, setVolume] = useState(75);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(true);
   const [pod, setpod] = useState<backendresponse["stream"] | undefined>();
   const progressRef = useRef<HTMLDivElement>(null);
   const id = useSearchParams().get("id");
 
+  const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/signin");
+    }
+  }, [session, status, router]);
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+
   const fetchmusicinfo = async (id: string) => {
     try {
       const result = await axios.post<backendresponse>("/api/player", {
-          streamid: id 
+        streamid: id,
       });
 
       if (result.data && result.data.success) {
+        console.log(result);
         setpod(result.data.stream);
-       console.log(pod)
+
+        const currentUserId = session?.user.id;
+        const hasUpvoted = result.data.stream.upvotes.some(
+          (upvote: upvote) => upvote.userId === currentUserId
+        );
+        setIsLiked(hasUpvoted);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -81,7 +112,7 @@ export default function MusicPlayer() {
     if (id) {
       fetchmusicinfo(id);
     }
-  }, []);
+  }, [id,isLiked]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -89,8 +120,17 @@ export default function MusicPlayer() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
+  const play = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    } else {
+      setIsPlaying(!isPlaying);
+    }
   };
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -133,6 +173,51 @@ export default function MusicPlayer() {
 
   const progressPercentage = (currentTime / duration) * 100;
 
+  const hanldevote = async (id: string | undefined) => {
+    if (!id) return;
+    try {
+      let result;
+      if (isLiked) {
+        // If already liked, call downvote
+        result = await axios.post<backendresponse2>("/api/downvote", {
+          streamid: id,
+        });
+        if (result.data && result.data.success) {
+          setIsLiked(false);
+          fetchmusicinfo(id); // re-fetch to update upvotes
+        }
+      } else if (!isLiked) {
+        // If not liked, call upvote
+        result = await axios.post<backendresponse2>("/api/upvote", {
+          streamid: id,
+        });
+        if (result.data && result.data.success) {
+          setIsLiked(true);
+          fetchmusicinfo(id); // re-fetch to update upvotes
+        }
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const status = error.response.status;
+        if (status === 409) {
+          toast.info("Already liked!");
+        } else if (status === 401) {
+          toast.error("Please login first!");
+        } else if (status === 404) {
+          toast.error("User not found!!");
+        } else if (status == 500) {
+          toast.error("Something went wrong");
+          console.log(error);
+        }
+      } else {
+        if (error instanceof Error) {
+          toast.error(error.message);
+          console.log(error);
+        }
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Music Player */}
@@ -164,9 +249,10 @@ export default function MusicPlayer() {
                       className="rounded-2xl shadow-xl object-cover"
                     />
                     <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <audio ref={audioRef} src={pod?.cloudinaryURL} />
                       <Button
                         size="lg"
-                        onClick={handlePlayPause}
+                        onClick={play}
                         className="bg-white/90 text-slate-900 hover:bg-white rounded-full w-20 h-20 shadow-lg"
                       >
                         {isPlaying ? (
@@ -210,7 +296,7 @@ export default function MusicPlayer() {
                   </Button>
                   <Button
                     size="lg"
-                    onClick={handlePlayPause}
+                    onClick={play}
                     className="bg-green-600 hover:bg-green-700 text-white rounded-full w-16 h-16"
                   >
                     {isPlaying ? (
@@ -232,11 +318,11 @@ export default function MusicPlayer() {
                 <div className="flex items-center justify-between mb-8">
                   <Button
                     variant="ghost"
-                    onClick={() => setIsLiked(!isLiked)}
+                    onClick={() => hanldevote(pod?.id)}
                     className={`${isLiked ? "text-red-500" : "text-slate-400"} hover:text-red-500`}
                   >
                     <Heart
-                      className={`w-5 h-5 mr-2 ${isLiked ? "fill-red-500" : ""}`}
+                      className={`w-5 h-5 mr-2 ${isLiked ? "fill-green-500" : "fill-red-500"}`}
                     />
                     {isLiked ? "Liked" : "Like"}
                   </Button>

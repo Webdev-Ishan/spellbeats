@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import z from "zod";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+type upvote = {
+  userId: string;
+};
 
 type stream = {
   id: string;
@@ -18,6 +23,7 @@ type stream = {
   creator: {
     username: string;
   };
+  upvotes: upvote[];
 };
 
 type backendresponse = {
@@ -29,7 +35,6 @@ type backendresponse = {
 type backendresponse2 = {
   success: boolean;
   status: number;
-  result: stream[];
 };
 
 const queryschema = z.object({
@@ -42,6 +47,15 @@ export default function SearchPage() {
   const [upvote, setupvote] = useState(false);
 
   const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/signin");
+    }
+  }, [session, status, router]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -58,7 +72,12 @@ export default function SearchPage() {
 
       if (response.data && response.data.success) {
         setSearchResults(response.data.result);
-        console.log(response.data);
+        // Remove this block, as it is not needed and causes a type error.
+        const currentUserId = session?.user.id;
+        const hasUpvoted = response.data.result.some((stream) =>
+          stream.upvotes.some((upvote) => upvote.userId === currentUserId)
+        );
+        setupvote(hasUpvoted);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -90,7 +109,6 @@ export default function SearchPage() {
 
         if (result.data && result.data.success) {
           setupvote(true);
-         
         }
       } else {
         const result = await axios.post("/api/downvote", {
@@ -166,7 +184,6 @@ export default function SearchPage() {
                 {searchResults.map((song, idx) => (
                   <Card
                     key={idx}
-                    onClick={()=>router.push(`/player/?id=${encodeURIComponent(song.id)}`)}
                     className="border-1 border-black hover:border-green-500 shadow-md  hover:shadow-green-500 transition-shadow"
                   >
                     <CardContent className="p-4">
@@ -175,6 +192,11 @@ export default function SearchPage() {
                           <Image
                             src={song.bigImage || "/placeholder.svg"}
                             alt={song.title}
+                            onClick={() =>
+                              router.push(
+                                `/player/?id=${encodeURIComponent(song.id)}`
+                              )
+                            }
                             width={200}
                             height={200}
                             className="rounded-md object-cover"
@@ -190,12 +212,14 @@ export default function SearchPage() {
                           </p>
                         </div>
                         <Button
-                            variant="ghost"
-                            onClick={() => hanldevote(song.id)}
-                            size="sm"
-                            className={upvote ? "text-green-500 " : "text-gray-400"}
+                          variant="ghost"
+                          onClick={() => hanldevote(song.id)}
+                          size="sm"
+                          className={
+                            upvote ? "text-green-500 " : "text-gray-400"
+                          }
                         >
-                            <Heart fill={upvote ? "#22c55e" : "none"} />
+                          <Heart fill={upvote ? "#22c55e" : "none"} />
                         </Button>
                       </div>
                     </CardContent>

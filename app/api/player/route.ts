@@ -28,13 +28,18 @@ export async function POST(req: NextRequest) {
       where: {
         id: streamid,
       },
-      include:{
-        creator:{
-            select:{
-                username:true
-            }
-        }
-      }
+      include: {
+        creator: {
+          select: {
+            username: true,
+          },
+        },
+        upvotes: {
+          select: {
+            userId: true,
+          },
+        },
+      },
     });
 
     if (!stream) {

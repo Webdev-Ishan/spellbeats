@@ -66,6 +66,11 @@ export async function POST(req: NextRequest) {
             username: true,
           },
         },
+        upvotes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
 
