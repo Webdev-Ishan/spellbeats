@@ -90,7 +90,7 @@ export default function SignInForm() {
   };
   return (
     <>
-      <div className="shadow-input mx-auto mt-10 w-full max-w-md rounded-none bg-slate-800 p-4 md:rounded-2xl md:p-8 ">
+      <div className="shadow-input mx-auto mb-6 mt-10 w-full max-w-md rounded-none bg-slate-800 p-4 md:rounded-2xl md:p-8 ">
         <h2 className="text-xl font-bold text-green-500">
           Add a new stream to your collection
         </h2>

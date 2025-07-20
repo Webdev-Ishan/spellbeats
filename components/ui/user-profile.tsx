@@ -153,7 +153,11 @@ export default function UserProfile() {
                 {playlist.map((playlist, idx) => (
                   <Card
                     key={idx}
-                    onClick={() => router.push("/dashboard")}
+                    onClick={() =>
+                      router.push(
+                        `/player/?id=${encodeURIComponent(playlist.id)}`
+                      )
+                    }
                     className="hover:shadow-lg p-4 border-2 border-black hover:border-green-500 rounded-lg transition-shadow "
                   >
                     <CardContent>
@@ -163,11 +167,19 @@ export default function UserProfile() {
                         width={100}
                         height={100}
                         quality={100}
-                        onClick={() => router.push("/dashboard")}
+                        onClick={() =>
+                          router.push(
+                            `/player/?id=${encodeURIComponent(playlist.id)}`
+                          )
+                        }
                         className="rounded-md border-1 border-green-500 w-full aspect-square object-cover mb-3"
                       />
                       <h3
-                        onClick={() => router.push("/dashboard")}
+                        onClick={() =>
+                          router.push(
+                            `/player/?id=${encodeURIComponent(playlist.id)}`
+                          )
+                        }
                         className="font-semibold bg-black text-white text-center pb-1 border rounded-lg mb-1"
                       >
                         {playlist.title}

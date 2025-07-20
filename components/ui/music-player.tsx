@@ -5,16 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Play,
-  Pause,
-  SkipBack,
-  SkipForward,
-  Volume2,
-  Heart,
-  Share2,
-  MoreHorizontal,
-} from "lucide-react";
+import { Play, Pause, Volume2, Heart } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
@@ -50,7 +41,6 @@ type backendresponse2 = {
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(245); // fallback duration
   const [volume, setVolume] = useState(75);
   const [isLiked, setIsLiked] = useState(true);
   const [pod, setpod] = useState<backendresponse["stream"] | undefined>();
@@ -112,7 +102,7 @@ export default function MusicPlayer() {
     if (id) {
       fetchmusicinfo(id);
     }
-  }, [id,isLiked]);
+  }, [id, isLiked]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -132,46 +122,6 @@ export default function MusicPlayer() {
       setIsPlaying(!isPlaying);
     }
   };
-
-  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (progressRef.current) {
-      const rect = progressRef.current.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const newTime = (clickX / rect.width) * duration;
-      setCurrentTime(newTime);
-    }
-  };
-
-  const handleShare = async () => {
-    if (!pod) return;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${pod.title} by ${pod.creator.username}`,
-          text: `Check out this track!`,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log("Error sharing:", error);
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
-    }
-  };
-
-  // Simulate progress when playing
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying && currentTime < duration) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => Math.min(prev + 1, duration));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentTime, duration]);
-
-  const progressPercentage = (currentTime / duration) * 100;
 
   const hanldevote = async (id: string | undefined) => {
     if (!id) return;
@@ -270,76 +220,29 @@ export default function MusicPlayer() {
                   <div
                     ref={progressRef}
                     className="w-full bg-slate-200 rounded-full h-3 cursor-pointer mb-3"
-                    onClick={handleProgressClick}
                   >
-                    <div
-                      className="bg-green-600 h-3 rounded-full transition-all duration-300 relative"
-                      style={{ width: `${progressPercentage}%` }}
-                    >
+                    <div className="bg-green-600 h-3 rounded-full transition-all duration-300 relative">
                       <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-green-600 rounded-full shadow-md"></div>
                     </div>
                   </div>
                   <div className="flex justify-between text-sm text-slate-500">
                     <span>{formatTime(currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
                   </div>
                 </div>
 
-                {/* Main Controls */}
-                <div className="flex items-center justify-center space-x-6 mb-8">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="rounded-full w-14 h-14 bg-transparent"
-                  >
-                    <SkipBack className="w-6 h-6" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    onClick={play}
-                    className="bg-green-600 hover:bg-green-700 text-white rounded-full w-16 h-16"
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-7 h-7" />
-                    ) : (
-                      <Play className="w-7 h-7 ml-0.5" />
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="rounded-full w-14 h-14 bg-transparent"
-                  >
-                    <SkipForward className="w-6 h-6" />
-                  </Button>
-                </div>
-
-                {/* Secondary Controls */}
-                <div className="flex items-center justify-between mb-8">
+                {/* Like Button */}
+                <div className="flex items-center justify-center mb-8">
                   <Button
                     variant="ghost"
+                    size={"lg"}
                     onClick={() => hanldevote(pod?.id)}
                     className={`${isLiked ? "text-red-500" : "text-slate-400"} hover:text-red-500`}
                   >
                     <Heart
-                      className={`w-5 h-5 mr-2 ${isLiked ? "fill-green-500" : "fill-red-500"}`}
+                      className={`w-10 h-10 mr-2 ${isLiked ? "fill-green-500" : "fill-red-500"}`}
                     />
                     {isLiked ? "Liked" : "Like"}
                   </Button>
-
-                  <div className="flex items-center space-x-4">
-                    <Button
-                      variant="ghost"
-                      onClick={handleShare}
-                      className="text-slate-400 hover:text-green-600"
-                    >
-                      <Share2 className="w-5 h-5 mr-2" />
-                      Share
-                    </Button>
-                    <Button variant="ghost" className="text-slate-400">
-                      <MoreHorizontal className="w-5 h-5" />
-                    </Button>
-                  </div>
                 </div>
 
                 {/* Volume Control */}
