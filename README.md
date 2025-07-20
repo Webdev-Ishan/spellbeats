@@ -1,13 +1,13 @@
 # SpellCode 🎵
 
-A modern, full-stack music streaming and sharing platform built with Next.js, Prisma, PostgreSQL, and Cloudinary. SpellCode lets creators upload, manage, and share music streams, while users can search, play, and interact with tracks through upvotes and personalized dashboards.
+A modern, full-stack audio streaming platform built with Next.js, Prisma, PostgreSQL, and Cloudinary. SpellCode lets creators upload, manage, and share youtube vedios as streams, while users can search, play, and interact with tracks through upvotes and personalized dashboards.
 
 ---
 
 ## 🚀 Features
 
 - **Authentication:** Secure login/signup with NextAuth and JWT.
-- **Creator Dashboard:** Upload YouTube music, auto-fetch metadata, and manage your streams.
+- **Creator Dashboard:** Upload YouTube vedios, auto-fetch metadata, and manage your streams.
 - **Music Player:** Responsive, interactive player with queue, volume, and like/unlike (upvote/downvote) functionality.
 - **Search:** Fast, case-insensitive search for streams.
 - **Upvote/Downvote:** Real-time like/unlike for tracks, synced with backend.
@@ -130,16 +130,17 @@ MIT
 ## 💼 About
 
 SpellCode is designed for remote-first teams and modern music creators.  
-Built by [Your Name], inspired by the best practices in full-stack development.
+Built by [Ishan Saini], inspired by the best practices in full-stack development.
 
 ---
 
 ## 📮 Contact
 
-- [LinkedIn](https://linkedin.com/in/yourprofile)
-- [GitHub](https://github.com/yourusername)
-- [Email](mailto:your@email.com)
+- [LinkedIn](www.linkedin.com/in/ishan-saini-49b6842a6)
+- [GitHub](https://github.com/Webdev-Ishan)
+- [Twitter](https://x.com/saini_isha57790)
+- [Email](mailto:ishansaini0105@gmail.com)
 
 ---
 
-> _“Code is poetry. Music is magic. SpellCode brings them
+> \_“Code is poetry. Music is magic. SpellCode brings them
