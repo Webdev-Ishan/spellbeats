@@ -136,6 +136,18 @@ export async function GET(req: NextRequest) {
       where: {
         userId: userid,
       },
+      include: {
+        upvotes: {
+          select: {
+            userId: true,
+          },
+        },
+        creator: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
 
     if (!streams) {
@@ -145,10 +157,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    return NextResponse.json(
-      { success: true, streams },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, streams }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json(

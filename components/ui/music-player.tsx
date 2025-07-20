@@ -40,7 +40,6 @@ type backendresponse2 = {
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(75);
   const [isLiked, setIsLiked] = useState(true);
   const [pod, setpod] = useState<backendresponse["stream"] | undefined>();
@@ -102,13 +101,7 @@ export default function MusicPlayer() {
     if (id) {
       fetchmusicinfo(id);
     }
-  }, [id, isLiked]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
+  }, []);
 
   const play = () => {
     if (audioRef.current) {
@@ -224,9 +217,6 @@ export default function MusicPlayer() {
                     <div className="bg-green-600 h-3 rounded-full transition-all duration-300 relative">
                       <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-green-600 rounded-full shadow-md"></div>
                     </div>
-                  </div>
-                  <div className="flex justify-between text-sm text-slate-500">
-                    <span>{formatTime(currentTime)}</span>
                   </div>
                 </div>
 
