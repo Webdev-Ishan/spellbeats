@@ -142,7 +142,7 @@ export default function UserProfile() {
               </Button>
               <Button
                 onClick={() => router.push("/all-streams")}
-                className="bg-green-500 hover:bg-black text-white"
+                className="bg-green-500 ml-2 mr-2 hover:bg-black text-white"
               >
                 View Playlist
               </Button>
