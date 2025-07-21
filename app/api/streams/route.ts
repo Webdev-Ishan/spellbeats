@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     console.log("YouTube API response:", res);
     const data = await res.json();
 
-    if (data.items.length === 0) {
+    if (data.items === 0) {
       return NextResponse.json(
         { success: true, message: "Invalid or wrong ID" },
         { status: 403 }
