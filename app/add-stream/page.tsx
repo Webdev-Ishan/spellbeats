@@ -7,7 +7,7 @@ import z from "zod";
 import { toast } from "react-toastify";
 
 import { useRouter } from "next/navigation";
-import {  useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 
 const registerSchema = z.object({
@@ -67,12 +67,16 @@ export default function SignInForm() {
         const status = error.response.status;
         if (status === 400) {
           toast.error("Please login first");
+          console.log(error);
         } else if (status === 401) {
           toast.error("Wrong input");
+          console.log(error);
         } else if (status === 402) {
           toast.error("Invalid url or id");
+          console.log(error);
         } else if (status === 409) {
           toast.error("Stream already exists");
+          console.log(error);
         } else {
           toast.error("Something went wrong");
           console.log(error);
