@@ -63,7 +63,15 @@ export async function POST(req: NextRequest) {
       );
     }
     const res = await youtubesearchapi.GetVideoDetails(extractedid);
+    console.log("YouTube API response:", res);
     const title = res.title;
+    if (!res || !res.thumbnail || !res.thumbnail.thumbnails) {
+      return NextResponse.json(
+        { success: false, message: "Could not fetch video thumbnails." },
+        { status: 400 }
+      );
+    }
+
     const thumbnails = res.thumbnail.thumbnails;
     thumbnails.sort((a: { width: number }, b: { width: number }) =>
       a.width < b.width ? -1 : 1
