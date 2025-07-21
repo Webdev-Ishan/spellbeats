@@ -2,7 +2,6 @@ import { prisma } from "@/lib/DB";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getToken } from "next-auth/jwt";
-import * as youtubesearchapi from "youtube-search-api";
 import { uploadToCloudinary } from "@/helpers/cloudinaryUpload";
 
 // ✅ Regex Definitions
@@ -16,6 +15,8 @@ const streamSchema = z.object({
   url: z.string(),
   extractedid: z.string(),
 });
+
+const API_KEY = process.env.YOUTUBE_API_KEY;
 
 export async function POST(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
@@ -62,20 +63,32 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-    const res = await youtubesearchapi.GetVideoDetails(extractedid);
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=${extractedid}&key=${API_KEY}`
+    );
     console.log("YouTube API response:", res);
-    const title = res.title;
-    if (!res || !res.thumbnail || !res.thumbnail.thumbnails) {
+    const data = await res.json();
+
+    if (data.items.length === 0) {
       return NextResponse.json(
-        { success: false, message: "Could not fetch video thumbnails." },
-        { status: 400 }
+        { success: true, message: "Invalid or wrong ID" },
+        { status: 403 }
       );
     }
 
-    const thumbnails = res.thumbnail.thumbnails;
-    thumbnails.sort((a: { width: number }, b: { width: number }) =>
-      a.width < b.width ? -1 : 1
-    );
+    const video = data.items[0];
+    const snippet = video.snippet;
+
+    const thumbnails = snippet.thumbnails;
+    const thumbnailarray = Object.values(thumbnails) as Array<{ url: string; width: number; height: number }>;
+
+    const sortedThumbnails = thumbnailarray.sort((a, b) => a.width - b.width);
+
+    // Smallest
+    const smallest = sortedThumbnails[0];
+
+    // Largest
+    const largest = sortedThumbnails[sortedThumbnails.length - 1];
 
     const uploadResponse = await uploadToCloudinary(url);
     if (!uploadResponse.success) {
@@ -93,16 +106,12 @@ export async function POST(req: NextRequest) {
         url,
         extractedid,
         userId: token.id.toString(),
-        title,
+        title: snippet.title,
         cloudinaryURL,
         smallImage:
-          (thumbnails.length > 1
-            ? thumbnails[thumbnails.length - 2].url
-            : thumbnails[thumbnails.length - 1].url) ??
-          "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg",
+          typeof smallest === "object" && smallest.url ? smallest.url : "",
         bigImage:
-          thumbnails[thumbnails.length - 1].url ??
-          "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg",
+          typeof largest === "object" && largest.url ? largest.url : "",
       },
     });
     if (!newStream) {
