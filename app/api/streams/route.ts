@@ -2,7 +2,7 @@ import { prisma } from "@/lib/DB";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getToken } from "next-auth/jwt";
-import youtubesearchapi from "youtube-search-api";
+import * as youtubesearchapi from "youtube-search-api";
 import { uploadToCloudinary } from "@/helpers/cloudinaryUpload";
 
 // ✅ Regex Definitions
