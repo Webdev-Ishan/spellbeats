@@ -100,9 +100,8 @@ export async function POST(req: NextRequest) {
         extractedid,
         userId: token.id.toString(),
         title: snippet.title,
-        smallImage:
-          typeof smallest === "object" && smallest.url ? smallest.url : "",
-        bigImage: typeof largest === "object" && largest.url ? largest.url : "",
+        smallImage: smallest.url,
+        bigImage: largest.url,
       },
     });
     if (!newStream) {
