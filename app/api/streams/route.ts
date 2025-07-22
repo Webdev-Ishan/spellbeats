@@ -2,7 +2,6 @@ import { prisma } from "@/lib/DB";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getToken } from "next-auth/jwt";
-import { uploadToCloudinary } from "@/helpers/cloudinaryUpload";
 
 // ✅ Regex Definitions
 const youtubeRegex =
@@ -70,17 +69,21 @@ export async function POST(req: NextRequest) {
     const data = await res.json();
 
     if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
-  return NextResponse.json(
-    { success: true, message: "Invalid or wrong ID" },
-    { status: 403 }
-  );
-}
+      return NextResponse.json(
+        { success: true, message: "Invalid or wrong ID" },
+        { status: 403 }
+      );
+    }
 
     const video = data.items[0];
     const snippet = video.snippet;
 
     const thumbnails = snippet.thumbnails;
-    const thumbnailarray = Object.values(thumbnails) as Array<{ url: string; width: number; height: number }>;
+    const thumbnailarray = Object.values(thumbnails) as Array<{
+      url: string;
+      width: number;
+      height: number;
+    }>;
 
     const sortedThumbnails = thumbnailarray.sort((a, b) => a.width - b.width);
 
@@ -90,16 +93,6 @@ export async function POST(req: NextRequest) {
     // Largest
     const largest = sortedThumbnails[sortedThumbnails.length - 1];
 
-    const uploadResponse = await uploadToCloudinary(url);
-    if (!uploadResponse.success) {
-      return NextResponse.json(
-        { success: true, message: uploadResponse.error },
-        { status: 403 }
-      );
-    }
-
-    const cloudinaryURL: string = uploadResponse.url;
-
     const newStream = await prisma.streams.create({
       data: {
         active,
@@ -107,11 +100,9 @@ export async function POST(req: NextRequest) {
         extractedid,
         userId: token.id.toString(),
         title: snippet.title,
-        cloudinaryURL,
         smallImage:
           typeof smallest === "object" && smallest.url ? smallest.url : "",
-        bigImage:
-          typeof largest === "object" && largest.url ? largest.url : "",
+        bigImage: typeof largest === "object" && largest.url ? largest.url : "",
       },
     });
     if (!newStream) {

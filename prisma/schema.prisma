@@ -24,16 +24,15 @@ model user {
 }
 
 model streams {
-  id            String  @id @default(uuid())
-  active        Boolean @default(true)
-  url           String
-  extractedid   String
-  title         String  @default("")
-  bigImage      String  @default("")
-  smallImage    String  @default("")
-  cloudinaryURL String
-  userId        String
-  creator       user    @relation("UserStreams", fields: [userId], references: [id])
+  id          String  @id @default(uuid())
+  active      Boolean @default(true)
+  url         String
+  extractedid String
+  title       String  @default("")
+  bigImage    String  @default("")
+  smallImage  String  @default("")
+  userId      String
+  creator     user    @relation("UserStreams", fields: [userId], references: [id])
 
   upvotes Upvotes[] @relation("StreamUpvotes")
 }
