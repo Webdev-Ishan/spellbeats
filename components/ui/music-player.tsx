@@ -1,18 +1,19 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
+import placeholder from "../../public/logo.png";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-
+import { Play, Pause } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import ReactPlayer from "react-player";
+import Image from "next/image";
 type upvote = {
   userId: string;
 };
@@ -38,11 +39,11 @@ type backendresponse2 = {
 };
 
 export default function MusicPlayer() {
-  //const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
   const [isLiked, setIsLiked] = useState(true);
   const [pod, setpod] = useState<backendresponse["stream"] | undefined>();
-  const progressRef = useRef<HTMLDivElement>(null);
+
   const id = useSearchParams().get("id");
 
   const router = useRouter();
@@ -183,19 +184,35 @@ export default function MusicPlayer() {
 
                 {/* Album Art */}
                 <ReactPlayer
-                  className="w-full h-full mb-4 mt-4 "
                   src={pod?.url}
+                  loop={false}
+                  playing={isPlaying}
+                  volume={volume / 100}
+                  width="0px"
+                  height="0px"
+                  controls={false}
+                  style={{ display: "none" }}
                 />
-                {/* Progress Bar */}
-                <div className="mb-8">
-                  <div
-                    ref={progressRef}
-                    className="w-full bg-slate-200 rounded-full h-3 cursor-pointer mb-3"
+                <Image
+                  src={pod?.bigImage ?? placeholder}
+                  alt={pod?.title ?? "Album Art"}
+                  width={500}
+                  height={300}
+                  className="rounded-2xl shadow-xl object-cover"
+                />
+
+                <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button
+                    size="lg"
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    className="bg-white/90 text-slate-900 hover:bg-white rounded-full w-20 h-20 shadow-lg"
                   >
-                    <div className="bg-green-600 h-3 rounded-full transition-all duration-300 relative">
-                      <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-green-600 rounded-full shadow-md"></div>
-                    </div>
-                  </div>
+                    {isPlaying ? (
+                      <Pause className="w-8 h-8" />
+                    ) : (
+                      <Play className="w-8 h-8 ml-1" />
+                    )}
+                  </Button>
                 </div>
 
                 {/* Like Button */}
