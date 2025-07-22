@@ -182,7 +182,7 @@ export default function MusicPlayer() {
                 </div>
 
                 {/* Album Art */}
-                <ReactPlayer src='https://www.youtube.com/watch?v=LXb3EKWsInQ' />
+                <ReactPlayer src="https://www.youtube.com/watch?v=LXb3EKWsInQ" />
                 {/* Progress Bar */}
                 <div className="mb-8">
                   <div
