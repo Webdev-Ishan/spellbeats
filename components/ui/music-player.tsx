@@ -24,7 +24,7 @@ type backendresponse = {
     id: string;
     title: string;
     bigImage?: string;
-    cloudinaryURL: string;
+    url: string;
     creator: {
       username: string;
     };
@@ -182,7 +182,10 @@ export default function MusicPlayer() {
                 </div>
 
                 {/* Album Art */}
-                <ReactPlayer src="https://www.youtube.com/watch?v=LXb3EKWsInQ" />
+                <ReactPlayer
+                  className="w-full h-full mb-4 mt-4 "
+                  src={pod?.url}
+                />
                 {/* Progress Bar */}
                 <div className="mb-8">
                   <div
