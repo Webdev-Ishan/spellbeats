@@ -5,12 +5,11 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Volume2, Heart } from "lucide-react";
-import Image from "next/image";
+
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import placeholder from "../../public/logo.png";
+
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import ReactPlayer from "react-player";
@@ -39,7 +38,7 @@ type backendresponse2 = {
 };
 
 export default function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  //const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
   const [isLiked, setIsLiked] = useState(true);
   const [pod, setpod] = useState<backendresponse["stream"] | undefined>();
@@ -56,7 +55,7 @@ export default function MusicPlayer() {
     }
   }, [session, status, router]);
 
-  const audioRef = useRef<HTMLAudioElement>(null);
+  // const audioRef = useRef<HTMLAudioElement>(null);
 
   const fetchmusicinfo = async (id: string) => {
     try {
@@ -103,18 +102,18 @@ export default function MusicPlayer() {
     }
   }, []);
 
-  const play = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    } else {
-      setIsPlaying(!isPlaying);
-    }
-  };
+  // const play = () => {
+  //   if (audioRef.current) {
+  //     if (isPlaying) {
+  //       audioRef.current.pause();
+  //     } else {
+  //       audioRef.current.play();
+  //     }
+  //     setIsPlaying(!isPlaying);
+  //   } else {
+  //     setIsPlaying(!isPlaying);
+  //   }
+  // };
 
   const hanldevote = async (id: string | undefined) => {
     if (!id) return;
@@ -204,16 +203,16 @@ export default function MusicPlayer() {
                     onClick={() => hanldevote(pod?.id)}
                     className={`${isLiked ? "text-red-500" : "text-slate-400"} hover:text-red-500`}
                   >
-                    <Heart
+                    {/* <Heart
                       className={`w-10 h-10 mr-2 ${isLiked ? "fill-green-500" : "fill-red-500"}`}
-                    />
+                    /> */}
                     {isLiked ? "Liked" : "Like"}
                   </Button>
                 </div>
 
                 {/* Volume Control */}
                 <div className="flex items-center space-x-4">
-                  <Volume2 className="w-5 h-5 text-slate-600" />
+                  {/* <Volume2 className="w-5 h-5 text-slate-600" /> */}
                   <div className="flex-1">
                     <input
                       type="range"
