@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import axios from "axios";
 import placeholder from "../../public/logo.png";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-
+import ReactPlayer from "react-player";
 type upvote = {
   userId: string;
 };
@@ -20,7 +20,7 @@ type stream = {
   id: string;
   title: string;
   bigImage?: string;
-  cloudinaryURL: string;
+  url: string;
   creator: {
     username: string;
   };
@@ -44,7 +44,6 @@ export default function PlayerPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
   const [isLiked, setIsLiked] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
 
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -104,19 +103,6 @@ export default function PlayerPage() {
       setIsLiked(hasUpvoted);
     }
   }, [currentIndex, streams, session?.user?.id]);
-
-  const play = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    } else {
-      setIsPlaying(!isPlaying);
-    }
-  };
 
   const hanldevote = async (id: string | undefined) => {
     if (!id) return;
@@ -234,27 +220,37 @@ export default function PlayerPage() {
 
                 {/* Album Art */}
                 <div className="relative mb-8 p-4">
-                  <div className="aspect-square max-w-md mx-auto border-1 border-black p-4 rounded-lg relative group">
-                    <Image
-                      src={pod?.bigImage ?? placeholder}
-                      alt={pod?.title ?? "Album Art"}
-                      fill
-                      className="rounded-2xl shadow-xl object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <audio ref={audioRef} src={pod?.cloudinaryURL} />
-                      <Button
-                        size="lg"
-                        onClick={play}
-                        className="bg-white/90 text-slate-900 hover:bg-white rounded-full w-20 h-20 shadow-lg"
-                      >
-                        {isPlaying ? (
-                          <Pause className="w-8 h-8" />
-                        ) : (
-                          <Play className="w-8 h-8 ml-1" />
-                        )}
-                      </Button>
-                    </div>
+                  {/* Album Art */}
+                  <ReactPlayer
+                    src={pod?.url}
+                    loop={false}
+                    playing={isPlaying}
+                    volume={volume / 100}
+                    width="0px"
+                    height="0px"
+                    controls={false}
+                    style={{ display: "none" }}
+                  />
+                  <Image
+                    src={pod?.bigImage ?? placeholder}
+                    alt={pod?.title ?? "Album Art"}
+                    width={500}
+                    height={300}
+                    className="rounded-2xl shadow-xl object-cover"
+                  />
+
+                  <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      size="lg"
+                      onClick={() => setIsPlaying(!isPlaying)}
+                      className="bg-white/90 text-slate-900 hover:bg-white rounded-full w-20 h-20 shadow-lg"
+                    >
+                      {isPlaying ? (
+                        <Pause className="w-8 h-8" />
+                      ) : (
+                        <Play className="w-8 h-8 ml-1" />
+                      )}
+                    </Button>
                   </div>
                 </div>
 
