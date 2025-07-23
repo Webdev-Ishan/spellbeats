@@ -348,33 +348,59 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    if (existStream.url !== url) {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=${extractedid}&key=${API_KEY}`
+    );
+    console.log("YouTube API response:", res);
+    const data = await res.json();
+
+    if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
+      return NextResponse.json(
+        { success: true, message: "Invalid or wrong ID" },
+        { status: 403 }
+      );
+    }
+
+    const video = data.items[0];
+    const snippet = video.snippet;
+
+    const thumbnails = snippet.thumbnails;
+    const thumbnailarray = Object.values(thumbnails) as Array<{
+      url: string;
+      width: number;
+      height: number;
+    }>;
+
+    const sortedThumbnails = thumbnailarray.sort((a, b) => a.width - b.width);
+
+    // Smallest
+    const smallest = sortedThumbnails[0];
+
+    // Largest
+    const largest = sortedThumbnails[sortedThumbnails.length - 1];
+
+    if (existStream.url !== url && existStream.extractedid !== extractedid) {
       await prisma.streams.update({
         where: {
           id: streamid,
-          active: active,
         },
         data: {
           url: url,
+          active: active,
+          smallImage: smallest.url,
+          bigImage: largest.url,
         },
       });
     }
 
-    if (existStream.extractedid !== extractedid) {
-      await prisma.streams.update({
-        where: {
-          id: streamid,
-        },
-        data: {
-          extractedid: extractedid,
-          active: active,
-        },
-      });
-    }
+    return NextResponse.json(
+      { success: true, message: "Stream updated successfully." },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json(
-        { success: false, message: "Something went wrong." },
+        { success: false, message: error.message },
         { status: 500 }
       );
     }

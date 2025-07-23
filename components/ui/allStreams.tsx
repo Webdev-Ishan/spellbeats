@@ -137,7 +137,14 @@ export default function AllStreams() {
                   >
                     Delete
                   </h3>
-                  <h3 className="font-semibold bg-blue-500 hover:bg-blue-600 text-white text-center py-2 px-4 rounded-lg text-sm truncate">
+                  <h3
+                    onClick={() =>
+                      router.push(
+                        `/edit-stream/?streamid=${encodeURIComponent(playlist.id)}`
+                      )
+                    }
+                    className="font-semibold bg-blue-500 hover:bg-blue-600 text-white text-center py-2 px-4 rounded-lg text-sm truncate"
+                  >
                     Update
                   </h3>
                 </div>
