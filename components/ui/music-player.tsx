@@ -135,7 +135,7 @@ export default function MusicPlayer() {
           <h1 className="text-2xl font-bold text-slate-900">
             {pod?.title ?? "Unknown Title"}
           </h1>
-          <p className="text-lg text-slate-500">
+          <p className="text-lg text-blue-500 font-bold">
             {pod?.creator.username ?? "Unknown Artist"}
           </p>
 

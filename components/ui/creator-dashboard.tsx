@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Volume2, Heart, MoreHorizontal } from "lucide-react";
+import { Play, Pause, Heart, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -104,7 +104,7 @@ export default function PlayerPage() {
     }
   }, [currentIndex, streams, session?.user?.id]);
 
-  const hanldevote = async (id: string | undefined) => {
+  const handlevote = async (id: string | undefined) => {
     if (!id) return;
     try {
       let result;
@@ -201,93 +201,68 @@ export default function PlayerPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <section className="py-12 ">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <Card className="border-1 border-black shadow-2xl bg-gradient-to-br from-white to-slate-50">
-              <CardContent className="p-12">
-                {/* Song Info Header */}
-                <div className="text-center border-1 border-black p-3 rounded-lg mb-8">
-                  <Badge className="bg-green-100 text-green-800 hover:bg-green-100 mb-4">
-                    Now Playing
-                  </Badge>
-                  <h1 className="text-2xl font-bold text-slate-900 mb-2">
-                    {pod?.title ?? "Unknown Title"}
-                  </h1>
-                  <p className="text-xl text-green-500 mb-1">
-                    {pod?.creator.username ?? "Unknown Artist"}
-                  </p>
-                </div>
+        <div className="container   mx-auto px-10">
+          <div className="w-full  max-w-4xl bg-white mt-10 rounded-3xl shadow-2xl overflow-hidden">
+            <div className="relative group">
+              <Image
+                src={pod?.bigImage ?? placeholder}
+                alt={pod?.title ?? "Album Art"}
+                width={800}
+                height={400}
+                className="w-full h-[300px] object-cover"
+              />
 
-                {/* Album Art */}
-                <div className="relative mb-8 p-4">
-                  {/* Album Art */}
-                  <ReactPlayer
-                    src={pod?.url}
-                    loop={false}
-                    playing={isPlaying}
-                    volume={volume / 100}
-                    width="0px"
-                    height="0px"
-                    controls={false}
-                    style={{ display: "none" }}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  size="icon"
+                  className="w-16 h-16 bg-white text-black hover:bg-green-500 hover:text-white rounded-full shadow-lg"
+                  onClick={() => setIsPlaying(!isPlaying)}
+                >
+                  {isPlaying ? (
+                    <Pause className="w-8 h-8" />
+                  ) : (
+                    <Play className="w-8 h-8 ml-[2px]" />
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <div className="p-6 text-center space-y-4">
+              <h1 className="text-2xl font-bold text-slate-900">
+                {pod?.title ?? "Unknown Title"}
+              </h1>
+              <p className="text-lg text-slate-500">
+                {pod?.creator.username ?? "Unknown Artist"}
+              </p>
+
+              <div className="flex justify-center items-center gap-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => handlevote(pod.id)}
+                  className={`hover:text-red-600 transition-colors ${isLiked ? "text-red-500" : "text-slate-400"}`}
+                >
+                  <Heart
+                    className={`w-6 h-6 ${isLiked ? "fill-red-500" : ""}`}
                   />
-                  <Image
-                    src={pod?.bigImage ?? placeholder}
-                    alt={pod?.title ?? "Album Art"}
-                    width={500}
-                    height={300}
-                    className="rounded-2xl shadow-xl object-cover"
-                  />
+                  <span className="ml-2">{isLiked ? "Liked" : "Like"}</span>
+                </Button>
+              </div>
 
-                  <div className="absolute inset-0 bg-black/20 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      size="lg"
-                      onClick={() => setIsPlaying(!isPlaying)}
-                      className="bg-white/90 text-slate-900 hover:bg-white rounded-full w-20 h-20 shadow-lg"
-                    >
-                      {isPlaying ? (
-                        <Pause className="w-8 h-8" />
-                      ) : (
-                        <Play className="w-8 h-8 ml-1" />
-                      )}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Like Button */}
-                <div className="flex items-center justify-center mb-8">
-                  <Button
-                    variant="ghost"
-                    size={"lg"}
-                    onClick={() => hanldevote(pod?.id)}
-                    className={`${isLiked ? "text-red-500" : "text-slate-400"} hover:text-red-500`}
-                  >
-                    <Heart
-                      className={`w-10 h-10 mr-2 ${isLiked ? "fill-green-500" : "fill-red-500"}`}
-                    />
-                    {isLiked ? "Liked" : "Like"}
-                  </Button>
-                </div>
-
-                {/* Volume Control */}
-                <div className="flex items-center space-x-4">
-                  <Volume2 className="w-5 h-5 text-slate-600" />
-                  <div className="flex-1">
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={volume}
-                      onChange={(e) => setVolume(Number(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider"
-                    />
-                  </div>
-                  <span className="text-sm text-slate-600 w-8">{volume}</span>
-                </div>
-              </CardContent>
-            </Card>
+              <div className="flex items-center gap-4 mt-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={(e) => setVolume(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider"
+                />
+                <span className="text-sm text-slate-600 w-10 text-right">
+                  {volume}
+                </span>
+              </div>
+            </div>
           </div>
-
           {/* Queue Section */}
           <div className="max-w-2xl mx-auto mt-8">
             <Card className="border-0 shadow-lg">
@@ -335,6 +310,17 @@ export default function PlayerPage() {
             </Card>
           </div>
         </div>
+
+        <ReactPlayer
+          src={pod?.url}
+          loop={false}
+          playing={isPlaying}
+          volume={volume / 100}
+          width="0px"
+          height="0px"
+          controls={false}
+          style={{ display: "none" }}
+        />
       </section>
       <style jsx>{`
         .slider::-webkit-slider-thumb {

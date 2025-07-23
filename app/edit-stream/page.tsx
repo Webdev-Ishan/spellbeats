@@ -12,7 +12,6 @@ import axios from "axios";
 
 const registerSchema = z.object({
   url: z.string(),
-  extractedid: z.string(),
   streamid: z.string(),
   active: z.boolean(),
 });
@@ -39,14 +38,12 @@ export default function SignInForm() {
   }
 
   const [url, seturl] = useState("");
-  const [extractedid, setextractedid] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const parsedbody = registerSchema.safeParse({
       url,
-      extractedid,
       streamid,
       active: true,
     });
@@ -56,7 +53,6 @@ export default function SignInForm() {
       toast.error(errors.url?.[0] || "Invalid input");
       console.log(errors);
       seturl("");
-      setextractedid("");
 
       return;
     }
@@ -64,7 +60,6 @@ export default function SignInForm() {
     try {
       const response = await axios.put<backendresponse>("/api/streams", {
         url,
-        extractedid,
         streamid,
         active: true, // or bind to state
       });
@@ -100,7 +95,6 @@ export default function SignInForm() {
       }
     } finally {
       seturl("");
-      setextractedid("");
     }
   };
   return (
@@ -121,16 +115,6 @@ export default function SignInForm() {
               type="url"
               value={url}
               onChange={(e) => seturl(e.target.value)}
-            />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="extractedid">extractedid</Label>
-            <Input
-              id="extractedid"
-              placeholder="id of the vedio"
-              type="text"
-              value={extractedid}
-              onChange={(e) => setextractedid(e.target.value)}
             />
           </LabelInputContainer>
 

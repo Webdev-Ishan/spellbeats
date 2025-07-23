@@ -121,7 +121,7 @@ export default function Homepage() {
                 Your PodCast, Your World, Your Way
               </h1>
               <p className="text-xl lg:text-2xl text-white mb-8 leading-relaxed">
-                Discover, stream, and share your pods like never before. Join
+                Covert <span className="text-green-500">Youtube</span> vedios to a podcasts and share  like never before. Join
                 millions of knowledge lovers on the platform that puts artists and
                 users first.
               </p>

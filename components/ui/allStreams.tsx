@@ -117,6 +117,11 @@ export default function AllStreams() {
                   alt={playlist?.title ?? "Album Art"}
                   width={800}
                   height={400}
+                  onClick={() =>
+                    router.push(
+                      `/player/?id=${encodeURIComponent(playlist.id)}`
+                    )
+                  }
                   className="w-full mb-6 h-[300px] border-2 rounded-lg hover:border-green-500 object-cover"
                 />
                 <h3

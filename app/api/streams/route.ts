@@ -2,23 +2,21 @@ import { prisma } from "@/lib/DB";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getToken } from "next-auth/jwt";
+import extractYouTubeID from "@/helpers/urlParser";
 
 // ✅ Regex Definitions
 const youtubeRegex =
   /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-const youtubeIdRegex = /^[a-zA-Z0-9_-]{11}$/;
 
 // ✅ Zod schema with enum validation
 const streamSchema = z.object({
   active: z.boolean().default(true),
   url: z.string(),
-  extractedid: z.string(),
 });
 
 const updateSchema = z.object({
   active: z.boolean().default(true),
   url: z.string(),
-  extractedid: z.string(),
   streamid: z.string(),
 });
 
@@ -47,12 +45,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { url, extractedid, active } = parsedBody.data;
+  const { url, active } = parsedBody.data;
 
   const isYoutube = youtubeRegex.test(url);
-  const validYTid = youtubeIdRegex.test(extractedid);
 
-  if (!isYoutube || !validYTid || !url.includes(extractedid)) {
+  const extractedid = extractYouTubeID(url)?.toString();
+
+  if (!isYoutube || !url.includes(extractedid)) {
     return NextResponse.json(
       { success: false, message: "Invalid YouTube URL or ID" },
       { status: 402 }
@@ -302,12 +301,12 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const { url, extractedid, active, streamid } = parsedBody.data;
+  const { url, active, streamid } = parsedBody.data;
 
   const isYoutube = youtubeRegex.test(url);
-  const validYTid = youtubeIdRegex.test(extractedid);
+  const extractedid = extractYouTubeID(url);
 
-  if (!isYoutube || !validYTid || !url.includes(extractedid)) {
+  if (!isYoutube || !url.includes(extractedid)) {
     return NextResponse.json(
       { success: false, message: "Invalid YouTube URL or ID" },
       { status: 402 }
@@ -389,6 +388,8 @@ export async function PUT(req: NextRequest) {
           active: active,
           smallImage: smallest.url,
           bigImage: largest.url,
+          title: snippet.title,
+          extractedid: extractedid,
         },
       });
     }
