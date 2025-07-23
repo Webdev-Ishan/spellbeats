@@ -243,7 +243,6 @@ export default function PlayerPage() {
               </p>
 
               <div className="flex justify-center items-center gap-4">
-
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -255,10 +254,9 @@ export default function PlayerPage() {
                   }}
                 >
                   <ChevronsLeft
-                    className={`w-6 h-6 font-extrabold text-black`}
+                    className={`w-10 h-10 font-extrabold text-black`}
                   />
                 </Button>
-
 
                 <Button
                   variant="ghost"
@@ -276,12 +274,12 @@ export default function PlayerPage() {
                     if (currentIndex < streams.length - 1) {
                       setCurrentIndex(currentIndex + 1);
                     } else {
-                      setCurrentIndex(currentIndex);
+                      setCurrentIndex(currentIndex-(streams.length-1));
                     }
                   }}
                 >
                   <ChevronsRight
-                    className={`w-6 h-6 font-extrabold text-black`}
+                    className={`w-10 h-10 font-extrabold text-black`}
                   />
                 </Button>
               </div>
@@ -357,6 +355,13 @@ export default function PlayerPage() {
           width="0px"
           height="0px"
           controls={false}
+          onEnded={() => {
+            if (currentIndex < streams.length - 1) {
+              setCurrentIndex(currentIndex + 1);
+            } else {
+              setCurrentIndex(currentIndex - (streams.length - 1));
+            }
+          }}
           style={{ display: "none" }}
         />
       </section>
