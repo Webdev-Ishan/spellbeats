@@ -4,7 +4,14 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Heart, MoreHorizontal } from "lucide-react";
+import {
+  Play,
+  Pause,
+  Heart,
+  MoreHorizontal,
+  ChevronsRight,
+  ChevronsLeft,
+} from "lucide-react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -236,6 +243,23 @@ export default function PlayerPage() {
               </p>
 
               <div className="flex justify-center items-center gap-4">
+
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    if (currentIndex > 0) {
+                      setCurrentIndex(currentIndex - 1);
+                    } else {
+                      setCurrentIndex(currentIndex);
+                    }
+                  }}
+                >
+                  <ChevronsLeft
+                    className={`w-6 h-6 font-extrabold text-black`}
+                  />
+                </Button>
+
+
                 <Button
                   variant="ghost"
                   onClick={() => handlevote(pod.id)}
@@ -244,7 +268,21 @@ export default function PlayerPage() {
                   <Heart
                     className={`w-6 h-6 ${isLiked ? "fill-red-500" : ""}`}
                   />
-                  <span className="ml-2">{isLiked ? "Liked" : "Like"}</span>
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    if (currentIndex < streams.length - 1) {
+                      setCurrentIndex(currentIndex + 1);
+                    } else {
+                      setCurrentIndex(currentIndex);
+                    }
+                  }}
+                >
+                  <ChevronsRight
+                    className={`w-6 h-6 font-extrabold text-black`}
+                  />
                 </Button>
               </div>
 
