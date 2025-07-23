@@ -20,6 +20,11 @@ type backendresponse = {
   streams: stream[];
 };
 
+type backendresponse2 = {
+  success: boolean;
+  message: string;
+};
+
 export default function AllStreams() {
   const { data: session, status } = useSession();
 
@@ -60,6 +65,39 @@ export default function AllStreams() {
     }
   };
 
+  const handleDelete = async (streamid: string) => {
+    try {
+      const response = await axios.delete<backendresponse2>("/api/streams", {
+        data: { streamid },
+      });
+
+      if (response.data && response.data.success) {
+        fetchUserinfo();
+        toast.success("Deletion successfull");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const status = error.response.status;
+
+        if (status === 400) {
+          toast.error("Please login first!");
+        } else if (status === 404) {
+          toast.error("Stream or user not found!!");
+        } else if (status === 409) {
+          toast.error("You can not delete this");
+        } else if (status == 500) {
+          toast.error("Soemthing went wrong");
+          console.log(error);
+        }
+      } else {
+        if (error instanceof Error) {
+          toast.error("Soemthign went wrong");
+          console.log(error);
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     fetchUserinfo();
   }, []);
@@ -71,7 +109,7 @@ export default function AllStreams() {
           {playlist.map((playlist, idx) => (
             <Card
               key={idx}
-              className=" rounded-xl shadow-md p-4 transition-all duration-300"
+              className=" rounded-xl mb-8 shadow-md p-4 transition-all duration-300"
             >
               <CardContent className="p-2">
                 <Image
@@ -91,6 +129,18 @@ export default function AllStreams() {
                 >
                   {playlist.title}
                 </h3>
+
+                <div className="w-full h-auto mt-3 flex flex-wrap gap-6  justify-evenly items-center">
+                  <h3
+                    onClick={() => handleDelete(playlist.id)}
+                    className="font-semibold bg-red-500 hover:bg-slate-800 text-white text-center py-2 px-4 rounded-lg text-sm truncate"
+                  >
+                    Delete
+                  </h3>
+                  <h3 className="font-semibold bg-blue-500 hover:bg-blue-600 text-white text-center py-2 px-4 rounded-lg text-sm truncate">
+                    Update
+                  </h3>
+                </div>
               </CardContent>
             </Card>
           ))}

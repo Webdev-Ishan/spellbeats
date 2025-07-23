@@ -180,7 +180,7 @@ export default function UserProfile() {
                             `/player/?id=${encodeURIComponent(playlist.id)}`
                           )
                         }
-                        className="font-semibold bg-black text-white text-center pb-1 border rounded-lg mb-1"
+                        className="font-semibold py-3 px-3 bg-black text-white text-center  border rounded-lg mb-1"
                       >
                         {playlist.title}
                       </h3>

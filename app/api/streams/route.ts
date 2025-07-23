@@ -15,6 +15,16 @@ const streamSchema = z.object({
   extractedid: z.string(),
 });
 
+const updateSchema = z.object({
+  active: z.boolean().default(true),
+  url: z.string(),
+  extractedid: z.string(),
+  streamid: z.string(),
+});
+
+const deletSchema = z.object({
+  streamid: z.string(),
+});
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
 export async function POST(req: NextRequest) {
@@ -42,7 +52,7 @@ export async function POST(req: NextRequest) {
   const isYoutube = youtubeRegex.test(url);
   const validYTid = youtubeIdRegex.test(extractedid);
 
-  if (!isYoutube || !validYTid) {
+  if (!isYoutube || !validYTid || !url.includes(extractedid)) {
     return NextResponse.json(
       { success: false, message: "Invalid YouTube URL or ID" },
       { status: 402 }
@@ -165,6 +175,202 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true, streams }, { status: 200 });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { success: false, message: "Something went wrong." },
+        { status: 500 }
+      );
+    }
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
+
+  if (!token || !token.id) {
+    return NextResponse.json(
+      { success: false, message: "Please login first" },
+      { status: 400 }
+    );
+  }
+  const userid = token.id.toString();
+  const data = await req.json();
+
+  const parsedBody = deletSchema.safeParse(data);
+
+  if (!parsedBody.success) {
+    return NextResponse.json(
+      { success: false, message: "invalid Body Structure" },
+      { status: 401 }
+    );
+  }
+
+  const { streamid } = parsedBody.data;
+
+  try {
+    const existUser = await prisma.user.findUnique({
+      where: {
+        id: userid,
+      },
+    });
+
+    if (!existUser) {
+      return NextResponse.json(
+        { success: false, message: "User not found." },
+        { status: 404 }
+      );
+    }
+
+    const existStream = await prisma.streams.findUnique({
+      where: {
+        id: streamid,
+      },
+    });
+
+    if (!existStream) {
+      return NextResponse.json(
+        { success: false, message: "Stream not found." },
+        { status: 404 }
+      );
+    }
+
+    if (existStream.userId !== userid) {
+      return NextResponse.json(
+        { success: false, message: "You can not delete this stream." },
+        { status: 409 }
+      );
+    }
+
+    const relatedVotes = await prisma.upvotes.findMany({
+      where: {
+        streamsId: streamid,
+      },
+    });
+
+    if (relatedVotes) {
+      await prisma.upvotes.deleteMany({
+        where: {
+          streamsId: streamid,
+        },
+      });
+    }
+
+    await prisma.streams.deleteMany({
+      where: {
+        id: streamid,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Stream deleted successfully",
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { success: false, message: error.message },
+        { status: 500 }
+      );
+    }
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
+
+  if (!token || !token.id) {
+    return NextResponse.json(
+      { success: false, message: "Please login first" },
+      { status: 400 }
+    );
+  }
+  const userid = token.id.toString();
+  const data = await req.json();
+
+  const parsedBody = updateSchema.safeParse(data);
+
+  if (!parsedBody.success) {
+    return NextResponse.json(
+      { success: false, message: "invalid Body Structure" },
+      { status: 401 }
+    );
+  }
+
+  const { url, extractedid, active, streamid } = parsedBody.data;
+
+  const isYoutube = youtubeRegex.test(url);
+  const validYTid = youtubeIdRegex.test(extractedid);
+
+  if (!isYoutube || !validYTid || !url.includes(extractedid)) {
+    return NextResponse.json(
+      { success: false, message: "Invalid YouTube URL or ID" },
+      { status: 402 }
+    );
+  }
+
+  try {
+    const existUser = await prisma.user.findUnique({
+      where: {
+        id: userid,
+      },
+    });
+
+    if (!existUser) {
+      return NextResponse.json(
+        { success: false, message: "User not found." },
+        { status: 404 }
+      );
+    }
+
+    const existStream = await prisma.streams.findUnique({
+      where: {
+        id: streamid,
+      },
+    });
+
+    if (!existStream) {
+      return NextResponse.json(
+        { success: false, message: "Stream not found." },
+        { status: 404 }
+      );
+    }
+
+    if (existStream.userId !== userid) {
+      return NextResponse.json(
+        { success: false, message: "You can not update this stream." },
+        { status: 409 }
+      );
+    }
+
+    if (existStream.url !== url) {
+      await prisma.streams.update({
+        where: {
+          id: streamid,
+          active: active,
+        },
+        data: {
+          url: url,
+        },
+      });
+    }
+
+    if (existStream.extractedid !== extractedid) {
+      await prisma.streams.update({
+        where: {
+          id: streamid,
+        },
+        data: {
+          extractedid: extractedid,
+          active: active,
+        },
+      });
+    }
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json(
