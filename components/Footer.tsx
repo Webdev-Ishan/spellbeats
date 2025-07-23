@@ -6,11 +6,11 @@ function Footer() {
   return (
      <>
       <footer className="bg-slate-900 pt-4  text-white py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mt-16 mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+              <div className="flex items-center space-x-2 gap-6 mb-4">
+                <div className="w-8 h-8 gap-8 bg-green-600 rounded-full flex items-center justify-center">
                   <Play className="w-4 h-4 text-white fill-white" />
                 </div>
                 <span className="text-xl font-bold">SpellBeats</span>
@@ -25,7 +25,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Features
                   </Link>
@@ -33,7 +33,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Premium
                   </Link>
@@ -41,7 +41,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Mobile App
                   </Link>
@@ -54,7 +54,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     About
                   </Link>
@@ -62,7 +62,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Careers
                   </Link>
@@ -70,7 +70,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Press
                   </Link>
@@ -83,7 +83,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Help Center
                   </Link>
@@ -91,7 +91,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Contact
                   </Link>
@@ -99,7 +99,7 @@ function Footer() {
                 <li>
                   <Link
                     href="#"
-                    className="hover:text-green-400 transition-colors"
+                    className="hover:text-green-400 mb-12 transition-colors"
                   >
                     Privacy
                   </Link>

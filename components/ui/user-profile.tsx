@@ -164,8 +164,8 @@ export default function UserProfile() {
                       <Image
                         src={playlist.bigImage || "/placeholder.svg"}
                         alt={playlist.title}
-                        width={100}
-                        height={100}
+                        width={800}
+                        height={400}
                         quality={100}
                         onClick={() =>
                           router.push(

@@ -66,36 +66,40 @@ export default function AllStreams() {
 
   return (
     <div className="min-h-screen bg-black  text-white px-4 py-8">
-  {playlist.length > 0 ? (
-    <div className="grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {playlist.map((playlist, idx) => (
-        <Card
-          key={idx}
-          className=" rounded-xl shadow-md p-4 transition-all duration-300"
-        >
-          <CardContent className="p-2">
-            <Image
-              src={playlist.bigImage || "/placeholder.svg"}
-              alt={playlist.title}
-              width={150}
-              height={150}
-              quality={100}
-              priority
-              className="rounded-md border border-green-400 w-full aspect-square object-cover mb-2"
-            />
-            <h3 className="font-semibold bg-black hover:bg-slate-900 text-white text-center py-1 px-2 rounded-lg text-sm truncate">
-              {playlist.title}
-            </h3>
-          </CardContent>
-        </Card>
-      ))}
+      {playlist.length > 0 ? (
+        <div className="grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {playlist.map((playlist, idx) => (
+            <Card
+              key={idx}
+              className=" rounded-xl shadow-md p-4 transition-all duration-300"
+            >
+              <CardContent className="p-2">
+                <Image
+                  src={playlist?.bigImage}
+                  alt={playlist?.title ?? "Album Art"}
+                  width={800}
+                  height={400}
+                  className="w-full mb-6 h-[300px] border-2 rounded-lg hover:border-green-500 object-cover"
+                />
+                <h3
+                  onClick={() =>
+                    router.push(
+                      `/player/?id=${encodeURIComponent(playlist.id)}`
+                    )
+                  }
+                  className="font-semibold bg-black hover:bg-slate-900 text-white text-center py-2 px-4 rounded-lg text-sm truncate"
+                >
+                  {playlist.title}
+                </h3>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <p className="text-white text-center text-base mt-20">
+          No items in your playlist yet.
+        </p>
+      )}
     </div>
-  ) : (
-    <p className="text-white text-center text-base mt-20">
-      No items in your playlist yet.
-    </p>
-  )}
-</div>
-
   );
 }
