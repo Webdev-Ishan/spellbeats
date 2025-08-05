@@ -3,11 +3,17 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
+type UserResponse = {
+  id: string;
+  email: string;
+  name: string;
+};
+
 const shareSchema = z.object({
   Sharable: z.string(),
 });
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
 
   if (!token || !token.id) {
@@ -15,6 +21,7 @@ export async function GET(req: NextRequest) {
       {
         success: false,
         message: "Login please",
+        token,
       },
       {
         status: 400,
@@ -76,11 +83,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const response: string[] = [];
-
-    result.forEach((user) => {
-      response.push(user.id);
-    });
+    const response: UserResponse[] = result.map((user) => ({
+      id: user.id,
+      email: user.email,
+      name: user.username, // assuming username is stored in DB
+    }));
 
     return NextResponse.json(
       {
@@ -88,7 +95,7 @@ export async function GET(req: NextRequest) {
         response,
       },
       {
-        status: 500,
+        status: 200,
       }
     );
   } catch (error) {

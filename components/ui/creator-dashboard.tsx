@@ -81,7 +81,7 @@ export default function PlayerPage() {
   useEffect(() => {
     const fetchStreams = async () => {
       try {
-        const result = await axios.get<backendresponse>("/api/streams");
+        const result = await axios.get<backendresponse>(`/api/streams`);
         if (result.data && result.data.success) {
           setStreams(result.data.streams);
           // Set initial like state for first stream
