@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function Reviews() {
+  const router = useRouter();
   const [topic, settopic] = useState("");
   const [content, setcontent] = useState("");
 
@@ -21,6 +23,7 @@ export default function Reviews() {
 
       console.log("Submitted successfully:", response.data);
       toast.success("Submission Completed");
+      router.push("/Reviews")
       settopic("");
       setcontent("");
     } catch (error) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +46,8 @@ type backendresponse2 = {
 };
 
 export default function PlayerPage() {
+  const playerRef = useRef<HTMLVideoElement>(null);
+
   const [streams, setStreams] = useState<stream[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -60,6 +62,20 @@ export default function PlayerPage() {
       router.push("/signin");
     }
   }, [session, status, router]);
+
+  const skipForward = (seconds: number) => {
+    if (playerRef.current) {
+      const currentTime = playerRef.current.currentTime;
+      playerRef.current.currentTime = currentTime + seconds;
+    }
+  };
+
+  const skipBackward = (seconds: number) => {
+    if (playerRef.current) {
+      const currentTime = playerRef.current.currentTime;
+      playerRef.current.currentTime = currentTime - seconds;
+    }
+  };
 
   // Fetch all streams
   useEffect(() => {
@@ -274,7 +290,7 @@ export default function PlayerPage() {
                     if (currentIndex < streams.length - 1) {
                       setCurrentIndex(currentIndex + 1);
                     } else {
-                      setCurrentIndex(currentIndex-(streams.length-1));
+                      setCurrentIndex(currentIndex - (streams.length - 1));
                     }
                   }}
                 >
@@ -297,6 +313,12 @@ export default function PlayerPage() {
                   {volume}
                 </span>
               </div>
+              <Button className=" mr-2 p-4" onClick={() => skipBackward(10)}>
+                -10s
+              </Button>
+              <Button className="ml-2 mr-2 p-4" onClick={() => skipForward(10)}>
+                +10s
+              </Button>
             </div>
           </div>
           {/* Queue Section */}
@@ -348,6 +370,7 @@ export default function PlayerPage() {
         </div>
 
         <ReactPlayer
+          ref={playerRef}
           src={pod?.url}
           loop={false}
           playing={isPlaying}
