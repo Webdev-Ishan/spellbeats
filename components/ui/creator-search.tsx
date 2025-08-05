@@ -85,10 +85,13 @@ export default function CreatorSearchPage() {
       {/* Search Hero Section */}
       <section className="bg-black text-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <Badge className="bg-green-500 hover:bg-green-500 px-3 py-2 text-white mb-6">
+          <Badge
+            onClick={() => router.push("/search")}
+            className="bg-green-500 hover:bg-green-500 px-3 py-2 text-white mb-6"
+          >
             Discover Podcasts
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Search Pods</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Search Creators</h1>
           <p className="text-xl text-green-100 max-w-2xl mx-auto mb-8">
             Find your favorite podcasts, discover new creators, and explore
             millions of knowledge seekers
