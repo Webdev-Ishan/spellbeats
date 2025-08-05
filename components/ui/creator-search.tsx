@@ -121,22 +121,22 @@ export default function CreatorSearchPage() {
             {/* Search Results */}
             {searchResults.length > 0 && (
               <div className="space-y-4">
-                {searchResults.map((song, idx) => (
+                {searchResults.map((creator, idx) => (
                   <Card
                     key={idx}
                     className="border-1 border-black hover:border-green-500 shadow-md  hover:shadow-green-500 transition-shadow"
                   >
                     <CardContent
-                      onClick={() => router.push(`/dashboard`)}
+                      onClick={() => router.push(`/dashboard/${creator.id}`)}
                       className="p-4"
                     >
                       <div className="flex items-center space-x-4">
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-slate-900 text-lg truncate">
-                            {song.name}
+                            {creator.name}
                           </h3>
                           <p className="text-green-500 truncate">
-                            {song.email}
+                            {creator.email}
                           </p>
                         </div>
                       </div>

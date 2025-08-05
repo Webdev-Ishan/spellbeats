@@ -6,6 +6,7 @@ import SignOut from "./Signout";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "../public/logo.png";
+import { useSession } from "next-auth/react";
 export function NavbarDemo() {
   return (
     <div className="relative w-full flex items-center justify-center">
@@ -21,6 +22,8 @@ export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
+
   return (
     <div className={cn("fixed top-3 inset-x-0 w-full z-50", className)}>
       <nav className="flex items-center  bg-slate-800 border border-white hover:shadow hover:shadow-green-500  transition duration-300 justify-between w-[98%]  mr-4 ml-2  px-4 md:px-8  rounded-4xl  shadow ">
@@ -89,7 +92,7 @@ export default function Navbar({ className }: { className?: string }) {
             <MenuItem
               setActive={setActive}
               active={active}
-              onclick={() => router.push("/dashboard")}
+              onclick={() => router.push(`/dashboard/${session?.user.id}`)}
               className="text-white text-xs"
               item="Dashboard"
             ></MenuItem>
@@ -124,7 +127,9 @@ export default function Navbar({ className }: { className?: string }) {
             <HoveredLink onClick={() => router.push("/artists")}>
               Creators
             </HoveredLink>
-            <HoveredLink onClick={() => router.push("/dashboard")}>
+            <HoveredLink
+              onClick={() => router.push(`/dashboard${session?.user.id}`)}
+            >
               Dashboard
             </HoveredLink>
             <HoveredLink onClick={() => router.push("/reviews")}>

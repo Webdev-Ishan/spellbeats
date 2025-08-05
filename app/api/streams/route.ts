@@ -146,11 +146,19 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const userid = token.id.toString();
+    const searchParams = req.nextUrl.searchParams;
+    const creatorId = searchParams.get("creatorId");
+
+    if (!creatorId) {
+      return NextResponse.json(
+        { success: false, message: "creatorId missing" },
+        { status: 402 }
+      );
+    }
 
     const streams = await prisma.streams.findMany({
       where: {
-        userId: userid,
+        userId: creatorId,
       },
       include: {
         upvotes: {
