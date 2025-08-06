@@ -2,7 +2,7 @@ import { prisma } from "@/lib/DB";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
-import bcrypt from "bcrypt";
+
 import { Resend } from "resend";
 const registerSchema = z.object({
   username: z.string().min(3).max(20),
@@ -11,7 +11,6 @@ const registerSchema = z.object({
   bio: z.string().min(6).max(150),
 });
 
-const salt_value = process.env.salt_value;
 const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: NextRequest) {
   try {
@@ -41,7 +40,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { email, password, username, bio } = parsedBody.data;
+    const { email, username, bio } = parsedBody.data;
 
     const exist = await prisma.user.findUnique({
       where: {
@@ -88,21 +87,6 @@ export async function POST(req: NextRequest) {
         },
         data: {
           Bio: bio,
-        },
-      });
-    }
-
-    const hashed = await bcrypt.compare(exist.password, password);
-    if (!hashed) {
-      const salt = await bcrypt.genSalt(Number(salt_value));
-      const newpassword = await bcrypt.hash(password, salt);
-
-      await prisma.user.update({
-        where: {
-          id: userid,
-        },
-        data: {
-          password: newpassword,
         },
       });
     }

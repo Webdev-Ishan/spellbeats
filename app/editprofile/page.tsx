@@ -21,14 +21,12 @@ type backendresponse2 = {
     username: string;
     email: string;
     Bio: string;
-    password: string;
   };
 };
 
 const registerSchema = z.object({
   username: z.string().min(3).max(20),
   email: z.string(),
-  password: z.string().min(6).max(12),
   bio: z.string().min(6).max(150),
 });
 
@@ -55,7 +53,7 @@ export default function EditForm() {
       toast.error(errors.username?.[0] || "Invalid input");
       console.log(errors);
       setemail("");
-      setpassword("");
+
       setusername("");
       setbio("");
       return;
@@ -112,7 +110,6 @@ export default function EditForm() {
         setusername(userinfo.data.exist.username);
         setemail(userinfo.data.exist.email);
         setbio(userinfo.data.exist.Bio);
-        setpassword(userinfo.data.exist.password);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -168,16 +165,6 @@ export default function EditForm() {
               type="email"
               value={email}
               onChange={(e) => setemail(e.target.value)}
-            />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              placeholder="••••••••"
-              type="password"
-              value={password}
-              onChange={(e) => setpassword(e.target.value)}
             />
           </LabelInputContainer>
 
