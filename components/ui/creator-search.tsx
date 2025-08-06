@@ -87,13 +87,13 @@ export default function CreatorSearchPage() {
         <div className="container mx-auto px-4 text-center">
           <Badge
             onClick={() => router.push("/search")}
-            className="bg-green-500 ml-4 cursor-pointer hover:bg-green-500 px-3 py-2 text-white mb-6"
+            className="bg-green-500 ml-4 cursor-pointer hover:bg-green-600 px-3 py-2 text-white mb-6"
           >
             Discover Podcasts
           </Badge>
           <Badge
             onClick={() => router.push("/SearchCreator")}
-            className="bg-green-500 ml-4 cursor-pointer hover:bg-green-500 px-3 py-2 text-white mb-6"
+            className="bg-green-500 ml-4 cursor-pointer hover:bg-green-600 px-3 py-2 text-white mb-6"
           >
             Discover Creators
           </Badge>

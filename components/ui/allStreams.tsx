@@ -35,12 +35,14 @@ export default function AllStreams() {
       router.push("/");
     }
   }, [session, status, router]);
-
+  const creatorId = session?.user.id;
   const [playlist, setplaylist] = useState<stream[]>([]);
 
   const fetchUserinfo = async () => {
     try {
-      const userinfo = await axios.get<backendresponse>("/api/streams");
+      const userinfo = await axios.get<backendresponse>(
+        `/api/streams?creatorId=${creatorId}`
+      );
 
       if (userinfo.data && userinfo.data.success) {
         setplaylist(userinfo.data.streams);
@@ -68,7 +70,7 @@ export default function AllStreams() {
   const handleDelete = async (streamid: string) => {
     try {
       const response = await axios.delete<backendresponse2>(
-        `api/streams?${session?.user.id}`,
+        `api/streams?${creatorId}`,
         {
           data: { streamid },
         }
