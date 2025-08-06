@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 type artists = {
   username: string;
   email: string;
+  Sharable: string;
   _count: {
     streams: number;
   };
@@ -85,6 +86,11 @@ export default function AllArtists() {
                       <div className="flex-1">
                         <h3 className="text-2xl font-light text-slate-900 mb-2">
                           {artist.email}
+                        </h3>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-light text-slate-900 mb-2">
+                          {artist.Sharable}
                         </h3>
                       </div>
                     </div>

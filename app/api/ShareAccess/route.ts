@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     const result = await prisma.user.findMany({
       where: {
-        Sharable: Sharable,
+        OR: [{ Sharable: Sharable }, { username: Sharable }],
       },
     });
 
