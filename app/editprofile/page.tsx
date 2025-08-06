@@ -7,6 +7,7 @@ import z from "zod";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type backendresponse = {
   message: string;
@@ -37,7 +38,8 @@ export default function EditForm() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [bio, setbio] = useState("");
-
+  const { data: session } = useSession();
+  const creatorId = session?.user.id;
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -61,7 +63,7 @@ export default function EditForm() {
 
     try {
       const response = await axios.post<backendresponse>(
-        "/api/editprofile",
+        `/api/editprofile?creatorId=${creatorId}`,
         parsedbody.data,
         {
           withCredentials: true,

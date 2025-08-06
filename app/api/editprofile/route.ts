@@ -7,7 +7,6 @@ import { Resend } from "resend";
 const registerSchema = z.object({
   username: z.string().min(3).max(20),
   email: z.string(),
-  password: z.string().min(6).max(12),
   bio: z.string().min(6).max(150),
 });
 
@@ -36,7 +35,7 @@ export async function POST(req: NextRequest) {
           message: parsedBody.error.flatten,
           success: false,
         },
-        { status: 401 }
+        { status: 402 }
       );
     }
 
