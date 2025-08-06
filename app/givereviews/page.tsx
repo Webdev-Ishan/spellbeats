@@ -23,7 +23,7 @@ export default function Reviews() {
 
       console.log("Submitted successfully:", response.data);
       toast.success("Submission Completed");
-      router.push("/Reviews");
+      router.push("/reviews");
       settopic("");
       setcontent("");
     } catch (error) {
