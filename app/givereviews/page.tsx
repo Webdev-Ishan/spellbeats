@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Reviews() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function Reviews() {
 
       console.log("Submitted successfully:", response.data);
       toast.success("Submission Completed");
-      router.push("/Reviews")
+      router.push("/Reviews");
       settopic("");
       setcontent("");
     } catch (error) {
@@ -53,11 +53,9 @@ export default function Reviews() {
   return (
     <>
       <div className="shadow-input mx-auto mt-12 mb-12 w-full max-w-md rounded-none bg-slate-800 p-4 md:rounded-2xl md:p-8">
-        <h2 className="text-xl font-bold text-green-500">
-          Give us Review
-        </h2>
+        <h2 className="text-xl font-bold text-green-500">Give us Review</h2>
         <p className="mt-2 max-w-sm text-sm text-neutral-300">
-          Help  SpellBeats to develop the best user experience
+          Help SpellBeats to develop the best user experience
         </p>
 
         <form className="my-8" onSubmit={handleSubmit}>
