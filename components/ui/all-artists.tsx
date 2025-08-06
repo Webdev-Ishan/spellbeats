@@ -89,7 +89,7 @@ export default function AllArtists() {
                         </h3>
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-2xl font-light text-slate-900 mb-2">
+                        <h3 className="text-xl font-bold  text-blue-600 mb-2">
                           {artist.Sharable}
                         </h3>
                       </div>
