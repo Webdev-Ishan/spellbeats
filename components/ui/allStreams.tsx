@@ -67,9 +67,12 @@ export default function AllStreams() {
 
   const handleDelete = async (streamid: string) => {
     try {
-      const response = await axios.delete<backendresponse2>("/api/streams", {
-        data: { streamid },
-      });
+      const response = await axios.delete<backendresponse2>(
+        `api/streams?${session?.user.id}`,
+        {
+          data: { streamid },
+        }
+      );
 
       if (response.data && response.data.success) {
         fetchUserinfo();
