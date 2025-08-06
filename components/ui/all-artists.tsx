@@ -6,8 +6,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type artists = {
+  id: string;
   username: string;
   email: string;
   Sharable: string;
@@ -23,7 +25,7 @@ type backendresponse = {
 };
 export default function AllArtists() {
   const [Artists, setArtists] = useState<artists[]>([]);
-
+  const router = useRouter();
   const fetchartists = async () => {
     try {
       const response = await axios.get<backendresponse>("/api/artist");
@@ -74,7 +76,10 @@ export default function AllArtists() {
                   key={idx}
                   className="border-0 shadow-lg hover:shadow-xl transition-shadow"
                 >
-                  <CardContent className="p-8 border-1 flex flex-col md:flex-row justify-between items-center border-black rounded-xl">
+                  <CardContent
+                    onClick={() => router.push(`/dashboard/${artist.id}`)}
+                    className="p-8 border-1 flex flex-col md:flex-row justify-between items-center border-black rounded-xl"
+                  >
                     <div className="flex items-center justify-center space-x-6">
                       <div className="flex-1">
                         <h3 className="text-2xl font-bold text-green-500 mb-2">
