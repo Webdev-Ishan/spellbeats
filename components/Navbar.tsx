@@ -128,7 +128,7 @@ export default function Navbar({ className }: { className?: string }) {
               Creators
             </HoveredLink>
             <HoveredLink
-              onClick={() => router.push(`/dashboard${session?.user.id}`)}
+              onClick={() => router.push(`/dashboard/${session?.user.id}`)}
             >
               Dashboard
             </HoveredLink>
