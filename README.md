@@ -1,4 +1,4 @@
-# SpellCode 🎵
+# SpellBeats 🎵
 
 A modern, full-stack audio streaming platform built with Next.js, Prisma, PostgreSQL, and Cloudinary. SpellCode lets creators upload, manage, and share youtube vedios as streams, while users can search, play, and interact with tracks through upvotes and personalized dashboards.
 
