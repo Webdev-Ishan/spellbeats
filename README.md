@@ -4,9 +4,11 @@ A modern, full-stack audio streaming platform built with Next.js, Prisma, Postgr
 
 ---
 
-# Live Link
+## 🌐 Live Demo
 
-[www.spellbeats.online](www.spellbeats.online)
+👉 [SpellBeats](https://www.spellbeats.online/)
+
+---
 
 ## 🚀 Features
 
