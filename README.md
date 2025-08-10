@@ -4,6 +4,10 @@ A modern, full-stack audio streaming platform built with Next.js, Prisma, Postgr
 
 ---
 
+# Live Link
+
+[www.spellbeats.online](www.spellbeats.online)
+
 ## 🚀 Features
 
 - **Authentication:** Secure login/signup with NextAuth and JWT.
